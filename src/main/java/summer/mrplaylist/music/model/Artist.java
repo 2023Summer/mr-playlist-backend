@@ -25,8 +25,8 @@ public class Artist {
     @JoinColumn(name = "group_artist_id")
     private Artist groupArtist;
     // 그룹 인원
-    @OneToMany(mappedBy = "groupArtist", cascade = CascadeType.ALL)
-    private List<Artist> groupArtistList = new ArrayList<Artist>;
+    @OneToMany(mappedBy = "groupArtist", cascade = CascadeType.PERSIST)
+    private List<Artist> groupArtistList = new ArrayList<Artist>();
 
     @OneToMany(mappedBy = "music")
     private List<Music> musicList = new ArrayList<Music>();
