@@ -1,6 +1,7 @@
 package summer.mrplaylist.playlist.model;
 
 import jakarta.persistence.*;
+import summer.mrplaylist.music.model.Music;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +16,7 @@ public class PlaylistCategory {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "playlist_id")
     private Playlist playlist;
-    @OneToMany(mappedBy = "playlist_category")
-    private List<Category> categoryList = new ArrayList<Category>();
-
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
 }

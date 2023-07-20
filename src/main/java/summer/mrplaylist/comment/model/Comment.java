@@ -20,7 +20,7 @@ public class Comment {
     @JoinColumn(name = "playlist_id")
     private Playlist playlist;
 
-    @NotNull
+    @Column(name = "content", length = 512, nullable = false)
     private String content;
 
 

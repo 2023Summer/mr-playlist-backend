@@ -24,13 +24,9 @@ public class Music {
     private String url;
     @Column(name = "name", length = 200)
     private String description;
-    @Column(name = "views", nullable = false)
-    @ColumnDefault("0")
-    private int views;
 
     @CreatedDate
     @Column(name = "created_at")
     private LocalDateTime createdAt;
-
 
 }

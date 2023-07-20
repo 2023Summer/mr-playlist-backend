@@ -1,6 +1,7 @@
 package summer.mrplaylist.playlist.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import summer.mrplaylist.member.model.Member;
@@ -21,16 +22,18 @@ public class Playlist {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
-    private int musicCount;
+    @Column(name = "music_count", nullable = false)
+    private Integer musicCount;
     @Column(name = "url", length = 100, nullable = false)
     private String name;
+    @Column(name = "views", nullable = false)
+    @ColumnDefault("0")
+    private Integer views;
     @CreatedDate
     @Column(name = "created_at")
     private LocalDateTime createdAt;
-
     @OneToMany(mappedBy = "playlist")
     private List<Category> categoryList = new ArrayList<Category>();
-
     @OneToMany(mappedBy = "playlist")
     private List<Music> musicList = new ArrayList<Music>();
 

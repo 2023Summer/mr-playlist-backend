@@ -15,6 +15,7 @@ public class PlaylistMusic {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "playlist_id")
     private Playlist playlist;
-    @OneToMany(mappedBy = "playlist_music")
-    private List<Music> musicList = new ArrayList<Music>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "music_id")
+    private Music music;
 }
