@@ -18,18 +18,22 @@ public class Playlist {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "playlist_id")
     private Long id;
-    @OneToMany(mappedBy = "music")
-    private List<Music> musicList = new ArrayList<Music>();
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
-    private Integer musicCount;
-
+    private int musicCount;
     @Column(name = "url", length = 100, nullable = false)
     private String name;
     @CreatedDate
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "playlist")
+    private List<Category> categoryList = new ArrayList<Category>();
+
+    @OneToMany(mappedBy = "playlist")
+    private List<Music> musicList = new ArrayList<Music>();
+
 
 
 }

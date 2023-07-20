@@ -1,22 +1,20 @@
 package summer.mrplaylist.playlist.model;
 
 import jakarta.persistence.*;
+import summer.mrplaylist.music.model.Music;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class PlaylistCategory {
+public class PlaylistMusic {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "playlist_category_id")
+    @Column(name = "playlist_music_id")
     private Long id;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "playlist_id")
     private Playlist playlist;
-    @OneToMany(mappedBy = "playlist_category")
-    private List<Category> categoryList = new ArrayList<Category>();
-
-
+    @OneToMany(mappedBy = "playlist_music")
+    private List<Music> musicList = new ArrayList<Music>();
 }

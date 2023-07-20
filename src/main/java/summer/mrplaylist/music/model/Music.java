@@ -26,7 +26,7 @@ public class Music {
     private String description;
     @Column(name = "views", nullable = false)
     @ColumnDefault("0")
-    private Integer views;
+    private int views;
 
     @CreatedDate
     @Column(name = "created_at")

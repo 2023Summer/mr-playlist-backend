@@ -28,6 +28,6 @@ public class Artist {
     @OneToMany(mappedBy = "groupArtist", cascade = CascadeType.PERSIST)
     private List<Artist> groupArtistList = new ArrayList<Artist>();
 
-    @OneToMany(mappedBy = "music")
+    @OneToMany(mappedBy = "artist")
     private List<Music> musicList = new ArrayList<Music>();
 }
