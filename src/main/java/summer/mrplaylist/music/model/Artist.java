@@ -13,11 +13,11 @@ public class Artist {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "artist_id")
     private Long id;
-    @NotNull
+    @Column(name = "name", length = 100, nullable = false)
     private String name;
-    @NotNull
+    @Column(name = "description", length = 200)
     private String description;
-    @NotNull
+    @Column(name = "total_artist", nullable = false)
     private Integer totalArtist;
     // 순환참조
     // 그룹
