@@ -1,0 +1,23 @@
+spring:
+  profiles:
+    default: local
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: true
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: false
+
