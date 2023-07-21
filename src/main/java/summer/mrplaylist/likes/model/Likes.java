@@ -1,4 +1,4 @@
-package summer.mrplaylist.like.model;
+package summer.mrplaylist.likes.model;
 
 
 import jakarta.persistence.*;

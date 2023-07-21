@@ -26,7 +26,6 @@ decorator:
   datasource:
     p6spy:
       enable-logging: true
-
 ---
 spring:
   config:
