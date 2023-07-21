@@ -3,9 +3,6 @@ package summer.mrplaylist.playlist.model;
 import jakarta.persistence.*;
 import summer.mrplaylist.music.model.Music;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
 public class PlaylistMusic {
     @Id

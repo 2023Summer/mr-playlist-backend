@@ -1,7 +1,6 @@
 package summer.mrplaylist.comment.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import summer.mrplaylist.member.model.Member;
 import summer.mrplaylist.playlist.model.Playlist;
 

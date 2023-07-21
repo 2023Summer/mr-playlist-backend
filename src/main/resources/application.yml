@@ -1,0 +1,39 @@
+spring:
+  profiles:
+    default: local
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+
+  datasource:
+    url: jdbc:postgresql://0.0.0.0:5432/playlist
+    username: summer
+    password: "hothot123"
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: create
+
+    properties:
+      hibernate:
+        format_sql: true
+
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: true
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: false
+
