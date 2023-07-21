@@ -15,15 +15,19 @@ public class Music {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "music_id")
     private Long id;
+
+    @Column(name = "name", length = 100, nullable = false)
+    private String name;
+
+    @Column(name = "url", length = 512, nullable = false)
+    private String url;
+
+    @Column(name = "description", length = 200)
+    private String description;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "artist_id")
     private Artist artist;
-    @Column(name = "name", length = 100, nullable = false)
-    private String name;
-    @Column(name = "url", length = 512, nullable = false)
-    private String url;
-    @Column(name = "name", length = 200)
-    private String description;
 
     @CreatedDate
     @Column(name = "created_at")
