@@ -3,6 +3,7 @@ package summer.mrplaylist.music.model;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import summer.mrplaylist.playlist.model.Playlist;
 
 import java.time.LocalDateTime;
 
@@ -26,6 +27,10 @@ public class Music {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "artist_id")
     private Artist artist;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "playlist_id")
+    private Playlist playlist;
 
     @CreatedDate
     @Column(name = "created_at")

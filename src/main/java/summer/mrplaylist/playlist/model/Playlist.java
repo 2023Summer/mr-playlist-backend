@@ -5,6 +5,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import summer.mrplaylist.member.model.Member;
+import summer.mrplaylist.music.model.Music;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public class Playlist {
     private Member member;
     @Column(name = "music_count", nullable = false)
     private Integer musicCount;
-    @Column(name = "url", length = 100, nullable = false)
+    @Column(name = "name", length = 100, nullable = false)
     private String name;
     @Column(name = "views", nullable = false)
     @ColumnDefault("0")
@@ -33,9 +34,6 @@ public class Playlist {
     private LocalDateTime createdAt;
     @OneToMany(mappedBy = "playlist")
     private List<PlaylistCategory> categoryList = new ArrayList<>();
-    @OneToMany(mappedBy = "playlist")
-    private List<PlaylistMusic> musicList = new ArrayList<>();
-
-
-
+    @OneToMany(mappedBy = "playlist", cascade = CascadeType.PERSIST)
+    private List<Music> musicList = new ArrayList<>();
 }
