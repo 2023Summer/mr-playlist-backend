@@ -1,4 +1,4 @@
-package summer.mrplaylist.like.model;
+package summer.mrplaylist.likes.model;
 
 
 import jakarta.persistence.*;
@@ -6,7 +6,7 @@ import summer.mrplaylist.member.model.Member;
 import summer.mrplaylist.playlist.model.Playlist;
 
 @Entity
-public class Like {
+public class Likes {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

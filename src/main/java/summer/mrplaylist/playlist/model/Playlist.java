@@ -5,7 +5,6 @@ import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import summer.mrplaylist.member.model.Member;
-import summer.mrplaylist.music.model.Music;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -33,9 +32,9 @@ public class Playlist {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
     @OneToMany(mappedBy = "playlist")
-    private List<Category> categoryList = new ArrayList<Category>();
+    private List<PlaylistCategory> categoryList = new ArrayList<>();
     @OneToMany(mappedBy = "playlist")
-    private List<Music> musicList = new ArrayList<Music>();
+    private List<PlaylistMusic> musicList = new ArrayList<>();
 
 
 
