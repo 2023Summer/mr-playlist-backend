@@ -10,7 +10,7 @@ spring:
   datasource:
     url: jdbc:postgresql://0.0.0.0:5432/playlist
     username: summer
-    password: "hothot123"
+    password: hothot123
     driver-class-name: org.postgresql.Driver
   jpa:
     database: postgresql
