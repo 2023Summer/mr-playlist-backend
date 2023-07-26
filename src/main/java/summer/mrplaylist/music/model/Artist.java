@@ -35,7 +35,6 @@ public class Artist {
 
     @Builder.Default
     @OneToMany(mappedBy = "artist")
-
     private List<Music> musicList = new ArrayList<>();
 
     // 생성 메소드
@@ -54,9 +53,10 @@ public class Artist {
         this.totalArtist += 1;
     }
 
-    public String addDescription(String description){
-        this.description= this.getDescription()+", "+ description;
+    public String addDescription(String description) {
+        this.description = this.getDescription() + ", " + description;
         return description;
+    }
 
     public void addMusic(Music music) {
         this.musicList.add(music);
