@@ -10,8 +10,9 @@ spring:
   datasource:
     url: jdbc:postgresql://0.0.0.0:5432/playlist
     username: summer
-    password: "hothot123"
+    password: hothot123
     driver-class-name: org.postgresql.Driver
+
   jpa:
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
@@ -26,22 +27,7 @@ spring:
     redis:
       host: 127.0.0.1
       port: 6379
-# 테스트 이메일 전송
-#  mail:
-#    username: user
-#    password: 1234
-#    host: 127.0.0.1
-#    port: 3025
-#    protocol: smtp
-#    test-connection: false
-#    properties:
-#      mail:
-#        smtp:
-#          starttls:
-#            required: false
-#            enable: false
 
-# 실제 이메일 전송 시 사용
   mail:
     host: smtp.gmail.com
     port: 587
@@ -55,7 +41,6 @@ decorator:
   datasource:
     p6spy:
       enable-logging: true
-
 ---
 spring:
   config:

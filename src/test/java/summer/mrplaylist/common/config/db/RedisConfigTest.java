@@ -8,7 +8,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
 @SpringBootTest
 class RedisConfigTest {
     @Autowired
