@@ -67,4 +67,8 @@ public class Member {
         this.nickname = requestDto.getNickname();
         this.profileImg = requestDto.getProfileImg();
     }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }

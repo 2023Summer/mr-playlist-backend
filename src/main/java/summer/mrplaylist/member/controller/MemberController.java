@@ -27,6 +27,12 @@ public class MemberController {
     public ResponseEntity<String> update(@PathVariable Long id,
                                          @RequestBody UpdateMemberRequestDto requestDto) {
         memberService.update(id, requestDto);
-        return ResponseEntity.ok("가입 완료");
+        return ResponseEntity.ok("회원 수정");
     }
+
+    @PostMapping("/auth")
+    public ResponseEntity<String> emailAuth(String email) {
+        return null;
+    }
+
 }
