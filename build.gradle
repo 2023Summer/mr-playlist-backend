@@ -58,6 +58,8 @@ dependencies {
 
 	// mail 의존성 추가
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
+	testImplementation("com.icegreen:greenmail-junit5:1.6.0")
+
 }
 
 tasks.named('test') {
