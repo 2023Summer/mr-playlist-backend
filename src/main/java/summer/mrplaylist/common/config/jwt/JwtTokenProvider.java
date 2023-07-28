@@ -4,12 +4,15 @@ package summer.mrplaylist.common.config.jwt;
 import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import summer.mrplaylist.common.dto.JwtTokenDto;
 import summer.mrplaylist.common.service.RedisService;
 import summer.mrplaylist.common.service.UserDetailsServiceImpl;
 import summer.mrplaylist.member.model.Member;
@@ -26,6 +29,11 @@ public class JwtTokenProvider {
     private final UserDetailsServiceImpl userDetailsService;
     private final RedisService redisService;
 
+
+    public JwtTokenDto createAllToken(Member member) {
+        return JwtTokenDto.createJwtTokenDto(createAccessToken(member), createRefreshToken(member));
+
+    }
     public String createAccessToken(Member member) {
         return Jwts.builder()
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
@@ -78,6 +86,14 @@ public class JwtTokenProvider {
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
+    }
+
+    public String preprocessingToken(HttpServletRequest request){
+        String bearerToken = request.getHeader("Authorization");
+        if(StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")){
+            return bearerToken.substring(7);
+        }
+        return null;
     }
 
 
