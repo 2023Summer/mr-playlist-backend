@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import summer.mrplaylist.member.dto.AddMemberRequestDto;
+import summer.mrplaylist.member.dto.LoginMemberRequestDto;
 import summer.mrplaylist.member.dto.UpdateMemberRequestDto;
 import summer.mrplaylist.member.model.Member;
 import summer.mrplaylist.member.service.EmailService;
@@ -20,7 +21,7 @@ public class MemberController {
 
     private final MemberService memberService;
     private final EmailService emailService;
-    @PostMapping
+    @PostMapping("/join")
     public ResponseEntity<String> signUp(@RequestBody AddMemberRequestDto requestDto)
     {
         memberService.join(Member.createMember(requestDto));
@@ -51,6 +52,11 @@ public class MemberController {
             return ResponseEntity.ok(true);
         }
         return ResponseEntity.ok(false);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody LoginMemberRequestDto requestDto) {
+        return ResponseEntity.ok(memberService.login(requestDto));
     }
 
 }

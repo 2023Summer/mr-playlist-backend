@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import summer.mrplaylist.member.constant.Role;
 import summer.mrplaylist.member.dto.AddMemberRequestDto;
 import summer.mrplaylist.member.dto.UpdateMemberRequestDto;
 
@@ -39,6 +40,10 @@ public class Member {
     @Column(name = "profile_img", length = 512)
     private String profileImg;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    private Role role;
+
     @CreatedDate
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -48,10 +53,11 @@ public class Member {
     private LocalDateTime modifiedAt;
 
     @Builder
-    public Member(String email, String password, String nickname) {
+    public Member(String email, String password, String nickname, Role role) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
+        this.role = role;
     }
 
     public static Member createMember(AddMemberRequestDto requestDto) {
@@ -59,6 +65,7 @@ public class Member {
                 .email(requestDto.getEmail())
                 .password(requestDto.getPassword())
                 .nickname(requestDto.getNickname())
+                .role(Role.USER)
                 .build();
     }
 

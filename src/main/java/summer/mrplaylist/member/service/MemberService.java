@@ -5,6 +5,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import summer.mrplaylist.common.config.jwt.JwtTokenProvider;
+import summer.mrplaylist.member.constant.MemberConstants;
+import summer.mrplaylist.member.dto.LoginMemberRequestDto;
 import summer.mrplaylist.member.dto.UpdateMemberRequestDto;
 import summer.mrplaylist.member.model.Member;
 import summer.mrplaylist.member.repository.MemberRepository;
@@ -13,8 +16,11 @@ import summer.mrplaylist.member.repository.MemberRepository;
 @Transactional
 @Service
 public class MemberService {
+
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final JwtTokenProvider jwtTokenProvider;
+
     public Long join(Member member) {
         if(memberRepository.existsByEmail(member.getEmail())) {
             throw new IllegalStateException("이미 존재하는 이메일입니다."); // 이후 같은 부분 생길 시
@@ -25,11 +31,23 @@ public class MemberService {
         return member.getId();
     }
 
-    public Member update(Long id, UpdateMemberRequestDto updateMemberRequestDto) {
-        Member member = memberRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 회원이 존재하지 않습니다."));
-        member.update(updateMemberRequestDto);
+    public Member update(Long id, UpdateMemberRequestDto requestDto) {
+        Member member = memberRepository.findById(id).orElseThrow(() -> new IllegalArgumentException(MemberConstants.NOT_EXISTS_MEMBER));
+        member.update(requestDto);
         return member;
     }
+
+    public String login(LoginMemberRequestDto requestDto) {
+        Member member = memberRepository.findByEmail(requestDto.getEmail())
+                .orElseThrow(() -> new IllegalArgumentException(MemberConstants.LOGIN_FAILURE));
+        if(!bCryptPasswordEncoder.matches(requestDto.getPassword(), member.getPassword()))
+            throw new IllegalArgumentException(MemberConstants.LOGIN_FAILURE);
+
+        return jwtTokenProvider.createAccessToken(member);
+
+    }
+
+
 
 
 }
