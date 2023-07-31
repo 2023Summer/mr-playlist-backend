@@ -1,11 +1,17 @@
 package summer.mrplaylist.member.controller;
 
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import summer.mrplaylist.common.config.jwt.JwtProperties;
+import summer.mrplaylist.common.service.JwtTokenProvider;
+import summer.mrplaylist.common.dto.JwtTokenDto;
 import summer.mrplaylist.member.dto.AddMemberRequestDto;
+import summer.mrplaylist.member.dto.LoginMemberRequestDto;
 import summer.mrplaylist.member.dto.UpdateMemberRequestDto;
 import summer.mrplaylist.member.model.Member;
 import summer.mrplaylist.member.service.EmailService;
@@ -19,8 +25,9 @@ import summer.mrplaylist.member.service.MemberService;
 public class MemberController {
 
     private final MemberService memberService;
+    private final JwtTokenProvider jwtTokenProvider;
     private final EmailService emailService;
-    @PostMapping
+    @PostMapping("/join")
     public ResponseEntity<String> signUp(@RequestBody AddMemberRequestDto requestDto)
     {
         memberService.join(Member.createMember(requestDto));
@@ -51,6 +58,25 @@ public class MemberController {
             return ResponseEntity.ok(true);
         }
         return ResponseEntity.ok(false);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<JwtTokenDto> login(@RequestBody LoginMemberRequestDto requestDto,
+                                             HttpServletResponse response) {
+        JwtTokenDto tokenDto = memberService.login(requestDto);
+        response.setHeader("Authorization", JwtProperties.HEADER_STRING + tokenDto.getAccessToken());
+        response.setHeader("RefreshToken", JwtProperties.HEADER_STRING + tokenDto.getAccessToken());
+        return ResponseEntity.ok(tokenDto);
+    }
+
+    @PostMapping("/reissue")
+    public ResponseEntity<String> reissueAccessToken(@RequestBody JwtTokenDto tokenDto,
+                                                     HttpServletRequest request,
+                                                     HttpServletResponse response) {
+        String newAccessToken = jwtTokenProvider.reissueAccessToken(request);
+        response.setHeader("Authorization", JwtProperties.HEADER_STRING + newAccessToken);
+
+        return ResponseEntity.ok(newAccessToken);
     }
 
 }

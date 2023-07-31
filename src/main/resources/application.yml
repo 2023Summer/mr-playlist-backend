@@ -37,6 +37,15 @@ spring:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true
 
+  jwt:
+    secret: SlNPTl9XRUJfVE9LRU5fVEVTVF9TRUNSRVRfS0VZUw==
+
+  security:
+    user:
+      name: admin
+      password: 1234
+      roles: USER, ADMIN
+
 decorator:
   datasource:
     p6spy:
