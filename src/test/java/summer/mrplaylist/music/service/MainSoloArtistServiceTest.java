@@ -6,8 +6,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import summer.mrplaylist.music.dto.ArtistForm;
-import summer.mrplaylist.music.model.Artist;
-import summer.mrplaylist.music.repository.ArtistRepository;
+import summer.mrplaylist.music.model.MainArtist;
+import summer.mrplaylist.music.model.SoloArtist;
+import summer.mrplaylist.music.repository.MainArtistRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,55 +18,51 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class ArtistServiceTest {
+class MainSoloArtistServiceTest {
 
     @InjectMocks
     private ArtistService artistService;
 
     @Mock
-    private ArtistRepository artistRepository;
+    private MainArtistRepository mainArtistRepository;
     
     @Test
     public void createSoloArtistFirstTime() throws Exception {
         //given
-        List<ArtistForm> artistForms = new ArrayList<>();
         ArtistForm artistForm = new ArtistForm("IU", "국힙 원탑");
-        artistForms.add(artistForm);
-        Artist artist = Artist.builder()
+        MainArtist mainArtist = SoloArtist.builder()
                 .id(1L)
                 .name(artistForm.getName())
                 .description(artistForm.getDescription())
                 .build();
-        given(artistRepository.save(any())).willReturn(artist);
+        given(mainArtistRepository.save(any())).willReturn(mainArtist);
         //when
-        Artist createdArtist = artistService.createArtist(artistForms);
+        MainArtist createdMainArtist = artistService.createArtist(artistForm);
         //then
-        assertThat(createdArtist.getId()).isEqualTo(1L);
-        assertThat(createdArtist.getName()).isEqualTo(artistForm.getName());
-        assertThat(createdArtist.getDescription()).isEqualTo(artistForm.getDescription());
+        assertThat(createdMainArtist.getId()).isEqualTo(1L);
+        assertThat(createdMainArtist.getName()).isEqualTo(artistForm.getName());
+        assertThat(createdMainArtist.getDescription()).isEqualTo(artistForm.getDescription());
     }
 
     @Test
     public void createSoloArtistDuplicate() throws Exception {
         //given
-        List<ArtistForm> artistForms = new ArrayList<>();
         ArtistForm artistForm = new ArtistForm("IU", "국민 여동생");
-        artistForms.add(artistForm);
 
-        Artist artist = Artist.builder()
+        SoloArtist soloArtist = SoloArtist.builder()
                 .id(1L)
                 .name("IU")
                 .description("국힙 원탑")
                 .build();
-        given(artistRepository.findArtistByName(any())).willReturn(Optional.ofNullable(artist));
+        given(mainArtistRepository.findSoloArtistByName(any())).willReturn(Optional.ofNullable(soloArtist));
 
         //when
-        Artist duplicatedArtist = artistService.createArtist(artistForms);
+        MainArtist duplicatedMainArtist = artistService.createArtist(artistForm);
         //then
-        assertThat(duplicatedArtist.getId()).isEqualTo(1L);
-        assertThat(duplicatedArtist.getName()).isEqualTo(artistForm.getName());
-        assertThat(duplicatedArtist.getDescription())
-                .isEqualTo(artist.getDescription());
+        assertThat(duplicatedMainArtist.getId()).isEqualTo(1L);
+        assertThat(duplicatedMainArtist.getName()).isEqualTo(artistForm.getName());
+        assertThat(duplicatedMainArtist.getDescription())
+                .isEqualTo(soloArtist.getDescription());
     }
 
 }

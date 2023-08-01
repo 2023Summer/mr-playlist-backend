@@ -2,36 +2,35 @@ package summer.mrplaylist.music.model;
 
 import org.junit.jupiter.api.Test;
 import summer.mrplaylist.music.dto.ArtistForm;
+import summer.mrplaylist.music.dto.GroupForm;
 
 import static org.assertj.core.api.Assertions.*;
 
-class ArtistTest {
+class MainSoloArtistTest {
 
     @Test
     public void createArtistTest() throws Exception {
         //given
         ArtistForm artistForm = createArtistForm("IU", "국힙 원탑");
         //when
-        Artist artist = Artist.createArtist(artistForm);
+        SoloArtist artist = SoloArtist.createArtist(artistForm);
         //then
-        assertThat(artist.getTotalArtist()).isEqualTo(0);
         assertThat(artist.getName()).isEqualTo(artistForm.getName());
         assertThat(artist.getDescription()).isEqualTo(artistForm.getDescription());
-        assertThat(artist.getGroupArtist()).isEqualTo(null);
     }
 
     @Test
     public void addArtistGroup() throws Exception {
         //given
-        ArtistForm groupForm = createArtistForm("빅뱅", "YG");
+        GroupForm groupForm = new GroupForm("빅뱅", "YG");
         ArtistForm artistForm = createArtistForm("GD", "삐딱함");
-        Artist group = Artist.createArtist(groupForm);
-        Artist artist = Artist.createArtist(artistForm);
+        Group group = Group.createGroup(groupForm);
+        SoloArtist artist = SoloArtist.createArtist(artistForm);
         //when
         group.addArtist(artist);
         //then
-        assertThat(group.getGroupArtistList()).contains(artist);
-        assertThat(artist.getGroupArtist()).isEqualTo(group);
+        assertThat(group.getGroupSoloArtistList()).contains(artist);
+        assertThat(artist.getGroup()).isEqualTo(group);
         assertThat(group.getTotalArtist()).isEqualTo(1);
     }
 

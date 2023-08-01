@@ -32,7 +32,7 @@ public class Music {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "artist_id")
-    private Artist artist;
+    private MainArtist artist;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "playlist_id")
@@ -42,19 +42,19 @@ public class Music {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    public static Music createMusic(MusicForm musicForm, Artist artist){
+    public static Music createMusic(MusicForm musicForm, MainArtist mainArtist){
         Music music = Music.builder()
                 .name(musicForm.getName())
                 .url(musicForm.getUrl())
                 .description(musicForm.getDescription())
                 .build();
-        music.addArtist(artist);
+        music.addArtist(mainArtist);
         return music;
     }
 
-    private void addArtist(Artist artist) {
-        this.artist = artist;
-        artist.addMusic(this);
+    private void addArtist(MainArtist mainArtist) {
+        this.artist = mainArtist;
+        mainArtist.addMusic(this);
     }
 
 }
