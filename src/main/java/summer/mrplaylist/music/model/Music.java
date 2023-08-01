@@ -57,4 +57,9 @@ public class Music {
         mainArtist.addMusic(this);
     }
 
+    public void addPlaylist(Playlist playlist){
+        this.playlist = playlist;
+        playlist.addMusic(this);
+    }
+
 }

@@ -12,7 +12,13 @@ class MusicTest {
     @Test
     public void createMusic() throws Exception {
         //given
-        MusicForm musicForm = new MusicForm("좋은 날", url, "좋은날에 들으세요");
+        MusicForm musicForm = MusicForm.builder()
+                .name("좋은 날")
+                .url(url)
+                .description( "좋은날에 들으세요")
+                .build();
+
+
         SoloArtist soloArtist = SoloArtist.builder()
                 .id(1L)
                 .name("IU")

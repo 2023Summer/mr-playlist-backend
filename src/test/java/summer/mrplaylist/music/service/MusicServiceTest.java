@@ -32,7 +32,12 @@ class MusicServiceTest {
     @Test
     public void createMusic() throws Exception {
         //given
-        MusicForm musicForm = new MusicForm("좋은 날", url, "좋은날에 들으세요");
+        MusicForm musicForm = MusicForm.builder()
+                .name("좋은 날")
+                .url(url)
+                .description( "좋은날에 들으세요")
+                .build();
+
         List<ArtistForm> artistList = new ArrayList<>();
         SoloArtist soloArtist = SoloArtist.builder()
                 .id(1L)
@@ -40,16 +45,20 @@ class MusicServiceTest {
                 .description("국힙 원탑")
                 .build();
         ArtistForm artistForm = ArtistForm.toDto(soloArtist);
+        artistList.add(artistForm);
+
         Music music = Music.builder()
                 .name(musicForm.getName())
                 .description(musicForm.getDescription())
                 .url(musicForm.getUrl())
                 .artist(soloArtist)
                 .build();
+        musicForm.setArtistFormList(artistList);
+
         given(artistService.createArtist(any())).willReturn(soloArtist);
         given(musicRepository.save(any())).willReturn(music);
         //when
-        Music savedMusic = musicService.create(musicForm,artistForm);
+        Music savedMusic = musicService.create(musicForm);
         //then
         assertThat(savedMusic.getName()).isEqualTo(musicForm.getName());
         assertThat(savedMusic.getArtist().getName()).isEqualTo(soloArtist.getName());
