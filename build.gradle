@@ -66,8 +66,6 @@ dependencies {
 
 	//configurationProperties 관련 의존성 추가
 	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
-
-
 }
 
 tasks.named('test') {

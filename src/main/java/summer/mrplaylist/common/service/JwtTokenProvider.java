@@ -7,8 +7,6 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,8 +15,6 @@ import org.springframework.util.StringUtils;
 import summer.mrplaylist.common.config.jwt.JwtProperties;
 import summer.mrplaylist.common.constant.JwtTokenConstants;
 import summer.mrplaylist.common.dto.JwtTokenDto;
-import summer.mrplaylist.common.service.RedisService;
-import summer.mrplaylist.common.service.UserDetailsServiceImpl;
 import summer.mrplaylist.member.constant.MemberConstants;
 import summer.mrplaylist.member.model.Member;
 import summer.mrplaylist.member.repository.MemberRepository;
@@ -123,3 +119,4 @@ public class JwtTokenProvider {
     }
 
 }
+
