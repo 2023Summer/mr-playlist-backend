@@ -10,8 +10,9 @@ spring:
   datasource:
     url: jdbc:postgresql://0.0.0.0:5432/playlist
     username: summer
-    password: "hothot123"
+    password: hothot123
     driver-class-name: org.postgresql.Driver
+
   jpa:
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
@@ -21,6 +22,31 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${SMTP_EMAIL}
+    password: ${SMTP_PASSWORD}
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+
+  jwt:
+    secret-key: SlNPTl9XRUJfVE9LRU5fVEVTVF9TRUNSRVRfS0VZUw==
+    access-token-expiration: 180000 # 30분
+    refresh-token-expiration: 1296000000 # 15일
+
+  security:
+    user:
+      name: admin
+      password: 1234
+      roles: USER, ADMIN
 
 decorator:
   datasource:
@@ -36,4 +62,3 @@ decorator:
   datasource:
     p6spy:
       enable-logging: false
-

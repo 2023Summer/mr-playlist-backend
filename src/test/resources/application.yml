@@ -1,0 +1,37 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://0.0.0.0:5432/playlist
+    username: summer
+    password: hothot123
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+
+  mail:
+    host: 127.0.0.1
+    port: 3025
+    username: user
+    password: admin
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+    transport:
+      protocol: smtp
+    debug: true
+    default-encoding: UTF-8
+
+
+
