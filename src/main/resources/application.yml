@@ -38,7 +38,9 @@ spring:
       mail.smtp.starttls.enable: true
 
   jwt:
-    secret: SlNPTl9XRUJfVE9LRU5fVEVTVF9TRUNSRVRfS0VZUw==
+    secret-key: SlNPTl9XRUJfVE9LRU5fVEVTVF9TRUNSRVRfS0VZUw==
+    access-token-expiration: 180000 # 30분
+    refresh-token-expiration: 1296000000 # 15일
 
   security:
     user:
@@ -60,4 +62,3 @@ decorator:
   datasource:
     p6spy:
       enable-logging: false
-
