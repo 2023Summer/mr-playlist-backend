@@ -5,8 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import summer.mrplaylist.music.dto.ArtistForm;
-import summer.mrplaylist.music.model.Artist;
-import summer.mrplaylist.music.repository.ArtistRepository;
+import summer.mrplaylist.music.dto.GroupForm;
+import summer.mrplaylist.music.model.Group;
+import summer.mrplaylist.music.model.MainArtist;
+import summer.mrplaylist.music.model.SoloArtist;
+import summer.mrplaylist.music.repository.MainArtistRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,37 +20,21 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ArtistService {
 
-    private final ArtistRepository artistRepository;
+    private final MainArtistRepository mainArtistRepository;
 
     @Transactional
-    public Artist createArtist(List<ArtistForm> artistFormList){
-        if (artistFormList.size() == 1){
-            ArtistForm artistForm = artistFormList.get(0);
-            return createArtistByForm(artistForm);
-        }
-        else{
-            return createGroupArtist(artistFormList);
-        }
-    }
+    public Group createGroupArtist(GroupForm groupForm, List<ArtistForm> artistFormList) {
+        Group group = createGroup(groupForm);
 
-    /**
-     * 첫번째 그룹과 하위 멤버들을 만들어주는 메소드
-     * @param artistFormList
-     * @return
-     */
-    @Transactional
-    public Artist createGroupArtist(List<ArtistForm> artistFormList) {
-        Artist group = Artist.createArtist(artistFormList.get(0));
-
-        List<Artist> artistList = artistFormList.stream().skip(1)
-                .map(artistForm -> createArtistByForm(artistForm))
+        List<SoloArtist> soloArtists = artistFormList.stream()
+                .map(artistForm -> createArtist(artistForm))
                 .toList();
-        log.info("{}",artistList);
-        for (Artist artist : artistList) {
-            group.addArtist(artist);
+        log.info("{}", soloArtists);
+        for (SoloArtist soloArtist : soloArtists) {
+            group.addArtist(soloArtist);
         }
 
-        Artist savedGroup = artistRepository.save(group);
+        Group savedGroup = mainArtistRepository.save(group);
         return savedGroup;
 
     }
@@ -57,16 +44,31 @@ public class ArtistService {
      * @return
      */
     @Transactional
-    public Artist createArtistByForm(ArtistForm artistForm) {
-        Optional<Artist> findArtist = artistRepository.findArtistByName(artistForm.getName());
+    public SoloArtist createArtist(ArtistForm artistForm) {
+        Optional<MainArtist> findArtist = mainArtistRepository.findSoloArtistByName(artistForm.getName());
         if (findArtist.isPresent()){
-            Artist artist = findArtist.get();
+            SoloArtist artist = (SoloArtist) findArtist.get();
             artist.addDescription(artistForm.getDescription());
             return artist;
         }else{
-            Artist artist = Artist.createArtist(artistForm);
-            Artist savedArtist = artistRepository.save(artist);
+            SoloArtist artist = SoloArtist.createArtist(artistForm);
+            SoloArtist savedArtist = mainArtistRepository.save(artist);
             return savedArtist;
+        }
+    }
+
+    // 위와 비슷하지만 가수하고 입력값이 달라질것을 생각하여 분리
+    @Transactional
+    public Group createGroup(GroupForm groupForm) {
+        Optional<MainArtist> findGroup = mainArtistRepository.findGroupByName(groupForm.getGroupName());
+        if (findGroup.isPresent()){
+            Group group = (Group) findGroup.get();
+            group.addDescription(groupForm.getGroupDescription());
+            return group;
+        }else{
+            Group group = Group.createGroup(groupForm);
+            Group savedGroup = mainArtistRepository.save(group);
+            return savedGroup;
         }
     }
 }

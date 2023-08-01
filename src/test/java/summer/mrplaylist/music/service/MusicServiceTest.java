@@ -7,17 +7,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import summer.mrplaylist.music.dto.ArtistForm;
 import summer.mrplaylist.music.dto.MusicForm;
-import summer.mrplaylist.music.model.Artist;
 import summer.mrplaylist.music.model.Music;
-import summer.mrplaylist.music.repository.ArtistRepository;
+import summer.mrplaylist.music.model.SoloArtist;
 import summer.mrplaylist.music.repository.MusicRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -37,26 +34,26 @@ class MusicServiceTest {
         //given
         MusicForm musicForm = new MusicForm("좋은 날", url, "좋은날에 들으세요");
         List<ArtistForm> artistList = new ArrayList<>();
-        Artist artist = Artist.builder()
+        SoloArtist soloArtist = SoloArtist.builder()
                 .id(1L)
                 .name("IU")
                 .description("국힙 원탑")
                 .build();
-        artistList.add(ArtistForm.toDto(artist));
+        ArtistForm artistForm = ArtistForm.toDto(soloArtist);
         Music music = Music.builder()
                 .name(musicForm.getName())
                 .description(musicForm.getDescription())
                 .url(musicForm.getUrl())
-                .artist(artist)
+                .artist(soloArtist)
                 .build();
-        given(artistService.createArtist(any())).willReturn(artist);
+        given(artistService.createArtist(any())).willReturn(soloArtist);
         given(musicRepository.save(any())).willReturn(music);
         //when
-        Music savedMusic = musicService.create(musicForm,artistList);
+        Music savedMusic = musicService.create(musicForm,artistForm);
         //then
         assertThat(savedMusic.getName()).isEqualTo(musicForm.getName());
-        assertThat(savedMusic.getArtist().getName()).isEqualTo(artist.getName());
-        assertThat(artist.getMusicList().stream().map(m->m.getName()).toList())
+        assertThat(savedMusic.getArtist().getName()).isEqualTo(soloArtist.getName());
+        assertThat(soloArtist.getMusicList().stream().map(m->m.getName()).toList())
                 .contains(music.getName());
 
     }
