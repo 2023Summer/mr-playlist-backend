@@ -95,7 +95,7 @@ public class JwtTokenProvider {
 
     public String preprocessingToken(HttpServletRequest request){
         String bearerToken = request.getHeader(jwtProperties.HEADER_STRING);
-        if(StringUtils.hasText(bearerToken) && bearerToken.startsWith(jwtProperties.getSecretKey())){
+        if(StringUtils.hasText(bearerToken) && bearerToken.startsWith(jwtProperties.TOKEN_PREFIX)){
             return bearerToken.substring(7);
         }
         return null;
