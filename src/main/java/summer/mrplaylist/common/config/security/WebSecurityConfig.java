@@ -13,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import summer.mrplaylist.common.config.jwt.JwtAuthenticationFilter;
+import summer.mrplaylist.common.config.jwt.ExceptionHandlerFilter;
 import summer.mrplaylist.common.service.JwtTokenProvider;
 
 @Configuration
@@ -20,6 +21,7 @@ import summer.mrplaylist.common.service.JwtTokenProvider;
 public class WebSecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final ExceptionHandlerFilter exceptionHandlerFilter;
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -30,9 +32,8 @@ public class WebSecurityConfig {
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/api/members","/api/members/**").permitAll()
-                        .anyRequest().authenticated());
-
-
+                        .anyRequest().authenticated())
+                .addFilterBefore(exceptionHandlerFilter, JwtAuthenticationFilter.class);
 
         return http.build();
 

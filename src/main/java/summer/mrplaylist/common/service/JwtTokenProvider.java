@@ -15,6 +15,7 @@ import org.springframework.util.StringUtils;
 import summer.mrplaylist.common.config.jwt.JwtProperties;
 import summer.mrplaylist.common.constant.JwtTokenConstants;
 import summer.mrplaylist.common.dto.JwtTokenDto;
+import summer.mrplaylist.common.exception.TokenNotValidateException;
 import summer.mrplaylist.member.constant.MemberConstants;
 import summer.mrplaylist.member.model.Member;
 import summer.mrplaylist.member.repository.MemberRepository;
@@ -75,8 +76,8 @@ public class JwtTokenProvider {
                     .parseClaimsJws(token);
             return true;
         } catch (Exception e){
-            log.error("exception :" + e);
-            return false;
+            log.info("jwt exception: 리프레시토큰이 유효하지 않습니다. {}", e.getMessage());// 리프레시 토큰이 다르거나 유효하지 않은 토큰일경우
+            throw new TokenNotValidateException(JwtTokenConstants.INVALID_TOKEN); // 재발급 실패시 로그아웃 시켜야함
         }
     }
 
@@ -109,9 +110,12 @@ public class JwtTokenProvider {
         log.info("tg : {}, req : {}", targetRefreshToken, requestRefreshToken);
 
 
-        if(!targetRefreshToken.equals(requestRefreshToken) || !validToken(requestRefreshToken)) { // 리프레시 토큰이 다르거나 유효하지 않은 토큰일경우
-            throw new IllegalArgumentException(JwtTokenConstants.INVALID_TOKEN); // 재발급 실패시 로그아웃 시켜야함
+        if(!targetRefreshToken.equals(requestRefreshToken)){
+            log.info("jwt exception: 리프레시토큰이 다릅니다.");
+            throw new TokenNotValidateException(JwtTokenConstants.INVALID_TOKEN);
         }
+        validToken(requestRefreshToken);
+        
         Member member = memberRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new IllegalArgumentException(MemberConstants.NOT_EXISTS_MEMBER));
 
