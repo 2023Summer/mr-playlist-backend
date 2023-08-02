@@ -1,4 +1,4 @@
-package summer.mrplaylist.common.config;
+package summer.mrplaylist.common.config.db;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
