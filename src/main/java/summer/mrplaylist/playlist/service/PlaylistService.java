@@ -4,18 +4,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import summer.mrplaylist.member.model.Member;
-import summer.mrplaylist.music.dto.ArtistForm;
-import summer.mrplaylist.music.dto.GroupForm;
 import summer.mrplaylist.music.dto.MusicForm;
-import summer.mrplaylist.music.model.Music;
 import summer.mrplaylist.music.service.MusicService;
 import summer.mrplaylist.playlist.dto.PlaylistForm;
 import summer.mrplaylist.playlist.model.Playlist;
-import summer.mrplaylist.playlist.model.PlaylistCategory;
 import summer.mrplaylist.playlist.repository.PlaylistRepository;
 
 import java.util.List;
+
+import static summer.mrplaylist.playlist.constant.PlaylistConstant.*;
 
 @Slf4j
 @Service
@@ -29,11 +26,19 @@ public class PlaylistService {
 
     @Transactional
     public Playlist create(PlaylistForm playlistForm, List<MusicForm> musicFormList){
-
         Playlist playlist = Playlist.createPlaylist(playlistForm);
+        Playlist savedPlayList = plRepository.save(playlist);
+        plcService.join(savedPlayList,playlistForm.getCategoryNameList());
+        return addMusic(savedPlayList.getId(), musicFormList);
+
+    }
+
+    @Transactional
+    public Playlist addMusic(Long playlistId,List<MusicForm> musicFormList) {
+
+        Playlist playlist = plRepository.findById(playlistId).orElseThrow(() -> new IllegalArgumentException(NOT_FOUND_PLAYLIST));
         musicFormList.stream().map(musicService::create).forEach(music -> music.addPlaylist(playlist));
-        plcService.join(playlist,playlistForm.getCategoryNameList());
-        return plRepository.save(playlist);
+        return playlist;
 
     }
 

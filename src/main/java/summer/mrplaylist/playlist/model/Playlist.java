@@ -48,9 +48,6 @@ public class Playlist {
     private String description;
 
     @Builder.Default
-    @OneToMany(mappedBy = "playlist")
-    private List<PlaylistCategory> categoryList = new ArrayList<>();
-    @Builder.Default
     @OneToMany(mappedBy = "playlist", cascade = CascadeType.PERSIST)
     private List<Music> musicList = new ArrayList<>();
 
