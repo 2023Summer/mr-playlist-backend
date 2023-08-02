@@ -2,10 +2,7 @@ package summer.mrplaylist.member.model;
 
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -15,12 +12,12 @@ import summer.mrplaylist.member.dto.UpdateMemberRequestDto;
 
 import java.time.LocalDateTime;
 
-
-
-@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Entity
+@AllArgsConstructor
+@Builder
+@Getter
 @EntityListeners(AuditingEntityListener.class)
+@Entity
 public class Member {
 
     @Id

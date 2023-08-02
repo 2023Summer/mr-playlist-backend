@@ -1,12 +1,18 @@
 package summer.mrplaylist.music.model;
 
 import jakarta.persistence.*;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import summer.mrplaylist.music.dto.MusicForm;
 import summer.mrplaylist.playlist.model.Playlist;
 
 import java.time.LocalDateTime;
 
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
+@Getter
 @EntityListeners(AuditingEntityListener.class)
 @Entity
 public class Music {
@@ -26,7 +32,7 @@ public class Music {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "artist_id")
-    private Artist artist;
+    private MainArtist artist;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "playlist_id")
@@ -35,5 +41,25 @@ public class Music {
     @CreatedDate
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    public static Music createMusic(MusicForm musicForm, MainArtist mainArtist){
+        Music music = Music.builder()
+                .name(musicForm.getName())
+                .url(musicForm.getUrl())
+                .description(musicForm.getDescription())
+                .build();
+        music.addArtist(mainArtist);
+        return music;
+    }
+
+    private void addArtist(MainArtist mainArtist) {
+        this.artist = mainArtist;
+        mainArtist.addMusic(this);
+    }
+
+    public void addPlaylist(Playlist playlist){
+        this.playlist = playlist;
+        playlist.addMusic(this);
+    }
 
 }

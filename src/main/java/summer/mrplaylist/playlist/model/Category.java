@@ -2,7 +2,12 @@ package summer.mrplaylist.playlist.model;
 
 
 import jakarta.persistence.*;
+import lombok.*;
 
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
+@Getter
 @Entity
 public class Category {
     @Id
@@ -12,5 +17,11 @@ public class Category {
 
     @Column(name = "name", length = 50)
     private String name;
+
+    public static Category createCategory(String name){
+        return Category.builder()
+                .name(name)
+                .build();
+    }
 
 }
