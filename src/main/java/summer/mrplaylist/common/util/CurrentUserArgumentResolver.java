@@ -24,10 +24,15 @@ public class CurrentUserArgumentResolver implements HandlerMethodArgumentResolve
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication instanceof AnonymousAuthenticationToken) {
-            throw new IllegalAccessException("인증된 사용자가 아닙니다.");
+        if (authentication instanceof AnonymousAuthenticationToken || authentication == null) {
+            return null;
         }
+
         UserDetailsImpl principal = (UserDetailsImpl) authentication.getPrincipal();
+        if (principal == null) {
+            return null;
+        }
+
         return principal.getMember();
     }
 }
