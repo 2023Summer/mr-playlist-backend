@@ -1,6 +1,7 @@
 package summer.mrplaylist.common.model;
 
 import lombok.Data;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,7 +23,9 @@ public class UserDetailsImpl implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(ROLE_PREFIX + member.getRole().toString()));
     }
-
+    public Member getMember() {
+        return member;
+    }
     @Override
     public String getPassword() {
         return member.getPassword();
