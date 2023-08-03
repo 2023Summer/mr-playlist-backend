@@ -30,10 +30,10 @@ public class XlsxFileParser {
         XSSFWorkbook workbook = new XSSFWorkbook(excelFile);
         XSSFSheet sheet = workbook.getSheetAt(0);
 
+        List<Integer> plIndexList = new ArrayList<>();
+        Map<String, List<ArtistForm>> plGroupList = new HashMap<>();
 
         // 플레이리스트 인덱싱
-        System.out.println("sheet.getPhysicalNumberOfRows() = " + sheet.getPhysicalNumberOfRows());
-        List<Integer> plIndexList = new ArrayList<>();
         for (int rowIdx=3; rowIdx<=sheet.getPhysicalNumberOfRows();rowIdx++) {
             XSSFRow plRow = sheet.getRow(rowIdx);
             if(plRow != null) {
@@ -43,10 +43,8 @@ public class XlsxFileParser {
                     plIndexList.add(rowIdx);
             }
         }
-        
-        for(int plidx : plIndexList){
-            System.out.println("plidx = " + plidx);
-        }
+        plIndexList.add(sheet.getPhysicalNumberOfRows());
+
         // 파싱
         for (int i = 0; i < plIndexList.size();i++) {
             XSSFRow plRow = sheet.getRow(plIndexList.get(i));
@@ -64,7 +62,7 @@ public class XlsxFileParser {
                     .build();
 
             List<MusicForm> musicFormList = new ArrayList<>();
-            for (int rowIdx=plIndexList.get(i); rowIdx<= plIndexList.get(i+1);rowIdx++) {
+            for (int rowIdx=plIndexList.get(i); rowIdx< plIndexList.get(i+1);rowIdx++) {
                 XSSFRow row = sheet.getRow(rowIdx);
                 if(row == null)
                     continue;
@@ -72,6 +70,9 @@ public class XlsxFileParser {
                     break;
                 // 음악
                 String musicName = readCell(row, 3);
+                if(musicName.isBlank()) {
+                    break;
+                }
                 String musicDescription = readCell(row, 4);
                 String musicUrl = readCell(row, 5);
 
@@ -81,24 +82,39 @@ public class XlsxFileParser {
 
                 // 가수 목록
                 List<ArtistForm> artistList = new ArrayList<>();
-                for (int colIdx=9; colIdx <= row.getPhysicalNumberOfCells(); colIdx+=2) {
+                for (int colIdx = 9; colIdx <= row.getPhysicalNumberOfCells(); colIdx += 2) {
                     String artistName = readCell(row, colIdx);
-                    String artistDescription = readCell(row, colIdx+1);
-                    if (artistName != null) {
+                    String artistDescription = readCell(row, colIdx + 1);
+                    if (!artistName.isBlank()) {
                         artistList.add(new ArtistForm(artistName, artistDescription));
                     }
                 }
-                MusicForm musicForm = MusicForm.builder()
-                        .name(musicName)
-                        .description(musicDescription)
-                        .url(musicUrl)
-                        .artistFormList(artistList)
-                        .groupForm(new GroupForm(groupName, groupDescription))
-                        .build();
 
-                musicFormList.add(musicForm);
+                if(!groupName.isBlank()) {
+                    MusicForm musicForm = MusicForm.builder()
+                            .name(musicName)
+                            .description(musicDescription)
+                            .url(musicUrl)
+                            .artistFormList(artistList)
+                            .groupForm(new GroupForm(groupName, groupDescription))
+                            .build();
+
+                    musicFormList.add(musicForm);
+//                    plGroupList.put(groupName, artistList);
+                }
+                else { // 그룹 아닐때
+                    MusicForm musicForm = MusicForm.builder()
+                            .name(musicName)
+                            .description(musicDescription)
+                            .url(musicUrl)
+                            .artistFormList(artistList)
+                            .groupForm(null)
+                            .build();
+
+                    musicFormList.add(musicForm);
+                }
             }
-            System.out.println("musicFormList = " + musicFormList);
+            for(MusicForm musicForm : musicFormList)
             playlistService.create(playlistForm, musicFormList);
         }
 
@@ -120,10 +136,9 @@ public class XlsxFileParser {
             case BLANK: // 빈칸
                 value = cell.getBooleanCellValue() + "";
                 break;
-            case ERROR: // 에러난 처리
-                value = cell.getErrorCellValue() + "";
-                break;
         }
+        if(value == "false")
+            return "";
 
         return value;
     }
