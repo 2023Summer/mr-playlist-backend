@@ -10,6 +10,7 @@ import java.util.ArrayList;
 @Entity
 @Getter
 @DiscriminatorValue("A")
+@NoArgsConstructor
 public class SoloArtist extends MainArtist{
 
     // 그룹

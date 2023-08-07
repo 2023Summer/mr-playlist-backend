@@ -1,6 +1,8 @@
 package summer.mrplaylist.common.util;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -20,11 +22,17 @@ import java.util.*;
 
 @Component
 @RequiredArgsConstructor
-@Transactional
+@Slf4j
 public class XlsxFileParser {
 
     private final PlaylistService playlistService;
     ClassPathResource resource = new ClassPathResource("PlaylistData.xlsx");
+    @PostConstruct
+    @Transactional
+    public void init() throws IOException {
+        log.info("PlaylistData.xlsx init");
+        fileRead();
+    }
     public void fileRead() throws IOException {
         FileInputStream excelFile = new FileInputStream(resource.getFile());
         XSSFWorkbook workbook = new XSSFWorkbook(excelFile);
@@ -114,7 +122,6 @@ public class XlsxFileParser {
                     musicFormList.add(musicForm);
                 }
             }
-            for(MusicForm musicForm : musicFormList)
             playlistService.create(playlistForm, musicFormList);
         }
 

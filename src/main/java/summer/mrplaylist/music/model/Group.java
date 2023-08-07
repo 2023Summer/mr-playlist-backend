@@ -11,6 +11,7 @@ import java.util.List;
 @Getter
 @Entity
 @DiscriminatorValue("G")
+@NoArgsConstructor
 public class Group extends MainArtist {
 
     @Column(name = "total_artist")
