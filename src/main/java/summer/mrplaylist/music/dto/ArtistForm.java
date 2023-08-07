@@ -10,10 +10,10 @@ import summer.mrplaylist.music.model.MainArtist;
 @AllArgsConstructor
 public class ArtistForm {
 
-    private String name;
-    private String description;
+	private String name;
+	private String description;
 
-    public static ArtistForm toDto(MainArtist mainArtist){
-        return new ArtistForm(mainArtist.getName(), mainArtist.getDescription());
-    }
+	public static ArtistForm toDto(MainArtist mainArtist) {
+		return new ArtistForm(mainArtist.getName(), mainArtist.getDescription());
+	}
 }

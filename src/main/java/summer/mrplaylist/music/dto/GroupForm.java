@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GroupForm {
-    private String groupName;
-    private String groupDescription;
+	private String groupName;
+	private String groupDescription;
 }
