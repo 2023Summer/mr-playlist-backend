@@ -1,95 +1,114 @@
 buildscript {
-	ext {
-		queryDslVersion = "5.0.0"
-	}
+    ext {
+        queryDslVersion = "5.0.0"
+    }
 }
 
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.1.1'
-	id 'io.spring.dependency-management' version '1.1.0'
+    id 'java'
+    id 'checkstyle'
+    id 'org.springframework.boot' version '3.1.1'
+    id 'io.spring.dependency-management' version '1.1.0'
+    id 'org.ec4j.editorconfig' version '0.0.3'
+
 }
 
 group = 'summer'
 version = '0.0.1-SNAPSHOT'
 
 java {
-	sourceCompatibility = '17'
+    sourceCompatibility = '17'
 }
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
+editorconfig {
+    excludes = ['build']
+}
+
+check.dependsOn editorconfigCheck // checkstyle이 설정 되어 있을 시, editorconfigCheck 후 checkstyle 진행
+
+checkstyle {
+    maxWarnings = 0
+    configFile = file("${rootDir}/config/naver-checkstyle-rules.xml")
+    configProperties = ["suppressionFile": "${rootDir}/config/naver-checkstyle-suppressions.xml"]
+    toolVersion = "8.42"
+}
+
+compileJava.options.encoding = 'UTF-8'
+compileTestJava.options.encoding = 'UTF-8'
+
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
-	testCompileOnly 'org.projectlombok:lombok'
-	testAnnotationProcessor 'org.projectlombok:lombok'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
 
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
-	annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
-	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
-	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
-  
-	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
+    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+    annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 
-	implementation 'org.postgresql:postgresql:42.5.0'
+    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
 
-	// Spring security 의존성 추가
-	implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.postgresql:postgresql:42.5.0'
 
-	// redis 의존성 추가
-	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    // Spring security 의존성 추가
+    implementation 'org.springframework.boot:spring-boot-starter-security'
 
-	// mail 의존성 추가
-	implementation 'org.springframework.boot:spring-boot-starter-mail'
-	testImplementation("com.icegreen:greenmail-junit5:1.6.0")
+    // redis 의존성 추가
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
-	//jwt 관련 의존성 추가
-	implementation 'io.jsonwebtoken:jjwt:0.9.1'
-	implementation 'javax.xml.bind:jaxb-api:2.3.1' // XML to JAVA mapper
+    // mail 의존성 추가
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+    testImplementation("com.icegreen:greenmail-junit5:1.6.0")
 
-	//configurationProperties 관련 의존성 추가
-	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+    //jwt 관련 의존성 추가
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+    implementation 'javax.xml.bind:jaxb-api:2.3.1' // XML to JAVA mapper
 
-	// excel 관련 의존성 추가
-	implementation 'org.apache.poi:poi:5.2.2'
-	implementation 'org.apache.poi:poi-ooxml:5.2.2'
+	  //configurationProperties 관련 의존성 추가
+	  annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+
+	  // excel 관련 의존성 추가
+	  implementation 'org.apache.poi:poi:5.2.2'
+	  implementation 'org.apache.poi:poi-ooxml:5.2.2'
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }
 // Querydsl 설정부
 def generated = 'src/main/generated'
 
 // querydsl QClass 파일 생성 위치를 지정
 tasks.withType(JavaCompile) {
-	options.getGeneratedSourceOutputDirectory().set(file(generated))
+    options.getGeneratedSourceOutputDirectory().set(file(generated))
 }
 
 // java source set 에 querydsl QClass 위치 추가
 sourceSets {
-	main.java.srcDirs += [ generated ]
+    main.java.srcDirs += [generated]
 }
 
 // gradle clean 시에 QClass 디렉토리 삭제
 clean {
-	delete file(generated)
+    delete file(generated)
 }
