@@ -28,7 +28,7 @@ class MusicServiceTest {
 	@Mock
 	private MusicRepository musicRepository;
 	@Mock
-	private ArtistService artistService;
+	private MainArtistService mainArtistService;
 
 	@Test
 	public void createMusic() throws Exception {
@@ -56,7 +56,7 @@ class MusicServiceTest {
 			.build();
 		musicForm.setArtistFormList(artistList);
 
-		given(artistService.createArtist(any())).willReturn(soloArtist);
+		given(mainArtistService.createArtist(any())).willReturn(soloArtist);
 		given(musicRepository.save(any())).willReturn(music);
 		//when
 		Music savedMusic = musicService.create(musicForm);

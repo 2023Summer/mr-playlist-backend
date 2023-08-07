@@ -2,6 +2,7 @@ package summer.mrplaylist.music.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +20,7 @@ import summer.mrplaylist.music.repository.MainArtistRepository;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class ArtistService {
+public class MainArtistService {
 
 	private final MainArtistRepository mainArtistRepository;
 
@@ -30,7 +31,13 @@ public class ArtistService {
 		List<SoloArtist> soloArtists = artistFormList.stream()
 			.map(artistForm -> createArtist(artistForm))
 			.toList();
-		log.info("{}", soloArtists);
+		log.info("SoloArtist = {}", soloArtists);
+
+		soloArtists = soloArtists.stream()
+			.filter(artist -> !group.getGroupSoloArtistList().contains(artist))
+			.collect(Collectors.toList());
+		log.info("Not duplicate artist = {}", soloArtists);
+
 		for (SoloArtist soloArtist : soloArtists) {
 			group.addArtist(soloArtist);
 		}

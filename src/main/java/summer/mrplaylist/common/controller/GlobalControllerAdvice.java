@@ -19,21 +19,21 @@ public class GlobalControllerAdvice {
 	@ResponseStatus(INTERNAL_SERVER_ERROR)
 	@ExceptionHandler(value = Exception.class)
 	public ErrorResponse exception(Exception e) {
-		log.error("error : {}", e.getStackTrace());
+		log.error("error : {}", e);
 		return createErrorResponse(e.getMessage());
 	}
 
 	@ResponseStatus(BAD_REQUEST)
 	@ExceptionHandler(value = {IllegalStateException.class, IllegalArgumentException.class})
 	public ErrorResponse badRequest(RuntimeException e) {
-		log.info("badRequest error: {}", e.getStackTrace());
+		log.info("badRequest error: {}", e);
 		return createErrorResponse(e.getMessage());
 	}
 
 	@ResponseStatus(UNAUTHORIZED)
 	@ExceptionHandler(value = BadCredentialsException.class)
 	public ErrorResponse badCredentialsException(BadCredentialsException e) {
-		log.info("BadCredentialsException error: {}", e.getStackTrace());
+		log.info("BadCredentialsException error: {}", e);
 		return createErrorResponse(e.getMessage());
 	}
 
