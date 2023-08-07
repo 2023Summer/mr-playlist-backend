@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import summer.mrplaylist.comment.model.Comment;
 import summer.mrplaylist.member.model.Member;
 import summer.mrplaylist.music.model.Music;
 import summer.mrplaylist.playlist.dto.PlaylistForm;
@@ -33,6 +34,9 @@ public class Playlist {
     @Column(name = "music_count", nullable = false)
     private Integer musicCount;
 
+    @Column(name = "comment_count", nullable = false)
+    private Integer commentCount;
+
     @Column(name = "name", length = 100, nullable = false)
     private String name;
 
@@ -51,6 +55,10 @@ public class Playlist {
     @OneToMany(mappedBy = "playlist", cascade = CascadeType.PERSIST)
     private List<Music> musicList = new ArrayList<>();
 
+    @Builder.Default
+    @OneToMany(mappedBy = "playlist", cascade = CascadeType.PERSIST)
+    private List<Comment> commentList = new ArrayList<>();
+
     public static Playlist createPlaylist(PlaylistForm playlistForm){
         return Playlist.builder()
                 .name(playlistForm.getPlName())
@@ -63,6 +71,10 @@ public class Playlist {
     public void addMusic(Music music){
         this.musicList.add(music);
         this.musicCount +=1;
+    }
+    public void addComment(Comment comment) {
+        this.commentList.add(comment);
+        this.commentCount +=1;
     }
 
 }
