@@ -9,6 +9,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import summer.mrplaylist.music.dto.ArtistForm;
 
 @Entity
@@ -19,13 +20,12 @@ public class SoloArtist extends MainArtist {
 
 	// 그룹
 	@ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "group_artist_id")
+	@JoinColumn(name = "group_artist_id")
 	private Group group;
 
 	@Builder
 	public SoloArtist(Long id, String name, String description, Group group) {
 		super(id, name, description, new ArrayList<>());
-
 		this.group = group;
 	}
 
@@ -40,4 +40,9 @@ public class SoloArtist extends MainArtist {
 	public void setGroup(Group group) {
 		this.group = group;
 	}
+
+	public void deleteGroup() {
+		this.group.deleteArtist(this);
+	}
+
 }

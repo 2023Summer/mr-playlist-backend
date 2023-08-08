@@ -20,6 +20,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import summer.mrplaylist.music.dto.MusicForm;
+import summer.mrplaylist.music.dto.MusicUpdateForm;
 import summer.mrplaylist.playlist.model.Playlist;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -73,6 +74,13 @@ public class Music {
 	public void addPlaylist(Playlist playlist) {
 		this.playlist = playlist;
 		playlist.addMusic(this);
+	}
+
+	public void updateInfo(MusicUpdateForm updateForm, MainArtist mainArtist) {
+		this.description = updateForm.getDescription();
+		this.name = updateForm.getName();
+		this.url = updateForm.getUrl();
+		this.artist = mainArtist;
 	}
 
 }

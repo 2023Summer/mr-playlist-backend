@@ -80,4 +80,7 @@ public class Playlist {
 		this.musicCount += 1;
 	}
 
+	public void minusMusic(Music music) {
+		this.musicList.remove(music);
+	}
 }
