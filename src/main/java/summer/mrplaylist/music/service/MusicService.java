@@ -19,18 +19,18 @@ import summer.mrplaylist.music.repository.MusicRepository;
 public class MusicService {
 
 	private final MusicRepository musicRepository;
-	private final ArtistService artistService;
+	private final MainArtistService mainArtistService;
 
 	@Transactional
 	public Music create(MusicForm musicForm) {
 		if (musicForm.getGroupForm() != null) {
-			Group Group = artistService.createGroupArtist(musicForm.getGroupForm(), musicForm.getArtistFormList());
+			Group Group = mainArtistService.createGroupArtist(musicForm.getGroupForm(), musicForm.getArtistFormList());
 			Music music = Music.createMusic(musicForm, Group);
 			return musicRepository.save(music);
 		} else {
 			ArtistForm artistForm = musicForm.getArtistFormList().get(0);
 
-			SoloArtist artist = artistService.createArtist(artistForm);
+			SoloArtist artist = mainArtistService.createArtist(artistForm);
 			Music music = Music.createMusic(musicForm, artist);
 			return musicRepository.save(music);
 		}

@@ -17,10 +17,10 @@ import summer.mrplaylist.music.model.SoloArtist;
 import summer.mrplaylist.music.repository.MainArtistRepository;
 
 @ExtendWith(MockitoExtension.class)
-class MainSoloArtistServiceTest {
+class MainArtistServiceTest {
 
 	@InjectMocks
-	private ArtistService artistService;
+	private MainArtistService mainArtistService;
 
 	@Mock
 	private MainArtistRepository mainArtistRepository;
@@ -36,7 +36,7 @@ class MainSoloArtistServiceTest {
 			.build();
 		given(mainArtistRepository.save(any())).willReturn(mainArtist);
 		//when
-		MainArtist createdMainArtist = artistService.createArtist(artistForm);
+		MainArtist createdMainArtist = mainArtistService.createArtist(artistForm);
 		//then
 		assertThat(createdMainArtist.getId()).isEqualTo(1L);
 		assertThat(createdMainArtist.getName()).isEqualTo(artistForm.getName());
@@ -56,7 +56,7 @@ class MainSoloArtistServiceTest {
 		given(mainArtistRepository.findSoloArtistByName(any())).willReturn(Optional.ofNullable(soloArtist));
 
 		//when
-		MainArtist duplicatedMainArtist = artistService.createArtist(artistForm);
+		MainArtist duplicatedMainArtist = mainArtistService.createArtist(artistForm);
 		//then
 		assertThat(duplicatedMainArtist.getId()).isEqualTo(1L);
 		assertThat(duplicatedMainArtist.getName()).isEqualTo(artistForm.getName());
