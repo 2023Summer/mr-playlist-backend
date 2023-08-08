@@ -15,6 +15,7 @@ import summer.mrplaylist.music.dto.GroupForm;
 @Getter
 @Entity
 @DiscriminatorValue("G")
+@NoArgsConstructor
 public class Group extends MainArtist {
 
 	@Column(name = "total_artist")
