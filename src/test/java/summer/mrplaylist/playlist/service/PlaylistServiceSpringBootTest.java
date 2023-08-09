@@ -118,7 +118,7 @@ public class PlaylistServiceSpringBootTest {
 
 		assertThatThrownBy(() -> playlistService.deleteMusic(playlist.getId(), music.getId()))
 			.isInstanceOf(IllegalStateException.class)
-			.hasMessageContaining("플레이스트는 촤소 1개의 음악을 가져야 합니다.");
+			.hasMessageContaining("플레이리스트는 촤소 1개의 음악을 가져야 합니다.");
 	}
 
 	private PlaylistForm getPlaylistForm() {
