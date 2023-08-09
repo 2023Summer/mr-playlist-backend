@@ -27,6 +27,7 @@ import lombok.NoArgsConstructor;
 import summer.mrplaylist.member.model.Member;
 import summer.mrplaylist.music.model.Music;
 import summer.mrplaylist.playlist.dto.PlaylistForm;
+import summer.mrplaylist.playlist.dto.PlaylistUpdateForm;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -81,6 +82,16 @@ public class Playlist {
 	}
 
 	public void minusMusic(Music music) {
+		this.musicList.remove(music);
+	}
+
+	public void updateInfo(PlaylistUpdateForm updateForm) {
+		this.name = updateForm.getPlName();
+		this.description = updateForm.getPlDescription();
+	}
+
+	public void deleteMusic(Music music) {
+		this.musicCount -= 1;
 		this.musicList.remove(music);
 	}
 }

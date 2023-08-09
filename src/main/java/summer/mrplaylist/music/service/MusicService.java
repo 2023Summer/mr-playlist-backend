@@ -42,8 +42,7 @@ public class MusicService {
 	// 새로운 그룹을 만들시 혹은 가수를 만들시는 새 팝업
 	@Transactional
 	public Music update(MusicUpdateForm updateForm) {
-		Music music = musicRepository.findById(updateForm.getMusicId())
-			.orElseThrow(() -> new IllegalStateException(MusicConstants.NOT_FOUND));
+		Music music = findMusic(updateForm.getMusicId());
 
 		MainArtist mainArtist = mainArtistService.findMainArtist(updateForm.getMainArtistId());
 		music.updateInfo(updateForm, mainArtist);
@@ -53,11 +52,15 @@ public class MusicService {
 
 	@Transactional
 	public void delete(Long musicId) {
-		Music music = musicRepository.findById(musicId)
-			.orElseThrow(() -> new IllegalStateException(MusicConstants.NOT_FOUND));
-
+		Music music = findMusic(musicId);
 		music.getPlaylist().minusMusic(music);
 		musicRepository.delete(music);
+	}
+
+	public Music findMusic(Long musicId) {
+		Music music = musicRepository.findById(musicId)
+			.orElseThrow(() -> new IllegalStateException(MusicConstants.NOT_FOUND));
+		return music;
 	}
 
 }
