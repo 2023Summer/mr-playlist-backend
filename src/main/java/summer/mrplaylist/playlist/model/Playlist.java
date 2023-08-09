@@ -65,6 +65,7 @@ public class Playlist {
                 .description(playlistForm.getPlDescription())
                 .views(0)
                 .musicCount(0)
+                .commentCount(0)
                 .member(playlistForm.getMember())
                 .build();
     }

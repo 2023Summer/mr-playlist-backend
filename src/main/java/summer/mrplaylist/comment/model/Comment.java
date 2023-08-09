@@ -13,9 +13,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-@Getter
 @EntityListeners(AuditingEntityListener.class)
 @Entity
+@Getter
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,20 +36,16 @@ public class Comment {
     @CreatedDate
     @Column(name = "created_at")
     private LocalDateTime createdAt;
-    public static Comment createComment(CommentForm commentForm){
+    public static Comment createComment(CommentForm commentForm, Member member, Playlist playlist){
         Comment comment = Comment.builder()
                 .content(commentForm.getContent())
-                .member(commentForm.getMember())
+                .member(member)
+                .playlist(playlist)
                 .build();
-        comment.addPlaylist(commentForm.getPlaylist());
 
         return comment;
     }
 
-    public void addPlaylist(Playlist playlist){
-        this.playlist = playlist;
-        playlist.addComment(this);
-    }
 
     public void update(String content) {
         this.content = content;
