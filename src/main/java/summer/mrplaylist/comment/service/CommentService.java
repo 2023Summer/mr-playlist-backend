@@ -9,6 +9,7 @@ import summer.mrplaylist.comment.repository.CommentRepository;
 import summer.mrplaylist.member.model.Member;
 import summer.mrplaylist.playlist.model.Playlist;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -33,17 +34,19 @@ public class CommentService {
      * 댓글 수정
      */
     @Transactional
-    public Long update(Long commentId, CommentForm commentForm){
-        Optional<Comment> comment = commentRepository.findById(commentId);
-        comment.get().update(commentForm.getContent());
-        return commentId;
+    public Comment update(Long commentId, CommentForm commentForm){
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new NoSuchElementException());
+        comment.update(commentForm.getContent());
+        return comment;
     }
 
     /**
      * 댓글 삭제
      */
     @Transactional
-    public void deleteComment(Long commentId){
+    public void delete(Long commentId){
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new NoSuchElementException());
+        comment.getPlaylist().removeComment(comment);
         commentRepository.deleteById(commentId);
     }
 

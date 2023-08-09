@@ -77,5 +77,9 @@ public class Playlist {
         this.commentList.add(comment);
         this.commentCount +=1;
     }
+    public void removeComment(Comment comment) {
+        this.commentList.remove(comment);
+        this.commentCount -=1;
+    }
 
 }

@@ -42,7 +42,7 @@ public class Comment {
                 .member(member)
                 .playlist(playlist)
                 .build();
-
+        playlist.addComment(comment);
         return comment;
     }
 
