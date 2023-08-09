@@ -9,7 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import summer.mrplaylist.music.constant.ArtistConstants;
 import summer.mrplaylist.music.dto.ArtistForm;
+import summer.mrplaylist.music.dto.ArtistUpdateForm;
 import summer.mrplaylist.music.dto.GroupForm;
 import summer.mrplaylist.music.model.Group;
 import summer.mrplaylist.music.model.MainArtist;
@@ -79,5 +81,31 @@ public class MainArtistService {
 			Group savedGroup = mainArtistRepository.save(group);
 			return savedGroup;
 		}
+	}
+
+	@Transactional
+	// 이름 설명 수정 (그룹, 가수)
+	public MainArtist update(ArtistUpdateForm artistUpdateForm) {
+		MainArtist mainArtist = findMainArtist(artistUpdateForm.getId());
+		mainArtist.update(artistUpdateForm);
+		return mainArtist;
+	}
+
+	/**
+	 * 솔로가수 삭제
+	 */
+	@Transactional
+	public void deleteSoloArtist(Long artistId) {
+		SoloArtist soloArtist = (SoloArtist)mainArtistRepository.findById(artistId)
+			.orElseThrow(() -> new IllegalStateException(ArtistConstants.NOT_FOUND));
+
+		soloArtist.deleteGroup();
+		mainArtistRepository.delete(soloArtist);
+	}
+
+	public MainArtist findMainArtist(Long id) {
+		MainArtist mainArtist = mainArtistRepository.findById(id)
+			.orElseThrow(() -> new IllegalStateException(ArtistConstants.NOT_FOUND));
+		return mainArtist;
 	}
 }

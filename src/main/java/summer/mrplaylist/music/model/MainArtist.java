@@ -13,6 +13,7 @@ import jakarta.persistence.InheritanceType;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import summer.mrplaylist.music.dto.ArtistUpdateForm;
 
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn
@@ -42,5 +43,11 @@ public abstract class MainArtist {
 
 	public void addMusic(Music music) {
 		this.musicList.add(music);
+	}
+
+	public MainArtist update(ArtistUpdateForm updateForm) {
+		this.description = updateForm.getDescription();
+		this.name = updateForm.getName();
+		return this;
 	}
 }

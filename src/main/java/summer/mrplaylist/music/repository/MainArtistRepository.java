@@ -11,4 +11,5 @@ public interface MainArtistRepository extends JpaRepository<MainArtist, Long> {
 	Optional<MainArtist> findGroupByName(String name);
 
 	Optional<MainArtist> findSoloArtistByName(String name);
+
 }

@@ -10,6 +10,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import summer.mrplaylist.music.dto.GroupForm;
 
 @Getter
@@ -45,6 +46,11 @@ public class Group extends MainArtist {
 		soloArtist.setGroup(this);
 		this.groupSoloArtistList.add(soloArtist);
 		this.totalArtist += 1;
+	}
+
+	public void deleteArtist(SoloArtist soloArtist) {
+		this.totalArtist -= 1;
+		this.groupSoloArtistList.remove(soloArtist);
 	}
 
 }
