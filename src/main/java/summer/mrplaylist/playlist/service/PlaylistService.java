@@ -62,7 +62,7 @@ public class PlaylistService {
 	public void deleteMusic(Long playListId, Long musicId) {
 		Playlist playlist = findPlaylist(playListId);
 		if (playlist.getMusicCount() == 1) {
-			throw new IllegalStateException("플레이스트는 촤소 1개의 음악을 가져야 합니다.");
+			throw new IllegalStateException("플레이리스트는 촤소 1개의 음악을 가져야 합니다.");
 		} else {
 			Music music = musicService.findMusic(musicId);
 			playlist.deleteMusic(music);

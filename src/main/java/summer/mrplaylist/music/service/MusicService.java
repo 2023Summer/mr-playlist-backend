@@ -53,7 +53,7 @@ public class MusicService {
 	@Transactional
 	public void delete(Long musicId) {
 		Music music = findMusic(musicId);
-		music.getPlaylist().minusMusic(music);
+		music.getPlaylist().deleteMusic(music);
 		musicRepository.delete(music);
 	}
 
