@@ -27,6 +27,7 @@ import summer.mrplaylist.music.dto.MusicForm;
 import summer.mrplaylist.playlist.dto.PlaylistForm;
 import summer.mrplaylist.playlist.service.PlaylistService;
 
+
 @Profile({"test", "init"})
 @Component
 @RequiredArgsConstructor
