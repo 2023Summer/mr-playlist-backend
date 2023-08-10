@@ -35,7 +35,7 @@ public class CommentService {
      */
     @Transactional
     public Comment update(Long commentId, CommentForm commentForm){
-        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new NoSuchElementException());
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 댓글은 수정이 불가능합니다."));
         comment.update(commentForm.getContent());
         return comment;
     }
@@ -45,7 +45,7 @@ public class CommentService {
      */
     @Transactional
     public void delete(Long commentId){
-        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new NoSuchElementException());
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 댓글은 삭제 불가능합니다."));
         comment.getPlaylist().removeComment(comment);
         commentRepository.deleteById(commentId);
     }

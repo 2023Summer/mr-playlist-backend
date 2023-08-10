@@ -56,7 +56,7 @@ public class Playlist {
     private List<Music> musicList = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "playlist", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "playlist", cascade = CascadeType.REMOVE)
     private List<Comment> commentList = new ArrayList<>();
 
     public static Playlist createPlaylist(PlaylistForm playlistForm){

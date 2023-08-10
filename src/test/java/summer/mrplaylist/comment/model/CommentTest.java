@@ -28,7 +28,6 @@ public class CommentTest {
 
 
         Comment comment = Comment.createComment(commentForm, member, playlist);
-        playlist.addComment(comment);
 
 
         // 컨텐츠 내용이 같은지. ✅
@@ -38,6 +37,7 @@ public class CommentTest {
         // 댓글 작성한 사람이 같은지. ✅
         assertThat(member.getId()).isEqualTo(comment.getMember().getId());
         // 플레이리스트의 댓글 개수가 맞는지. ✅
+        //System.out.println(playlist.getCommentCount());
         assertThat(playlist.getCommentCount()).isEqualTo(1);
         // 플레이리스트의 댓글 목록에 들어가있는지. ✅
         //System.out.println(playlist.getCommentList().get(0).getContent());

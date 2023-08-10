@@ -6,6 +6,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Data
-public class CommentForm {
+public class CommentUpdateForm {
+    private Long playlistId;
     private String content;
 }
