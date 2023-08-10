@@ -85,4 +85,11 @@ public class MemberController {
 		return ResponseEntity.ok(newAccessToken);
 	}
 
+	@GetMapping("/login/oauth2/code/{registartionId}")
+	public ResponseEntity<String> googleLoginTest(@RequestParam String code) {
+		log.info("code : {}", code);
+//		log.info("registrationId: {}", registrationId);
+		return ResponseEntity.ok("hi");
+	}
+
 }

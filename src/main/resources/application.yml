@@ -48,12 +48,16 @@ spring:
       password: 1234
       roles: USER, ADMIN
     oauth2:
-      google:
-        client-id: ${GOOGLE_CLIENT_ID}
-        client-secret: ${GOOGLE_CLIENT_SECRET}
-        redirect-uri: http://localhost:8080/api/members/login/oauth2/code/google
-        token-uri: https://oauth2.googleapis.com/token
-        resource-uri: https://www.googleapis.com/oauth2/v2/userinfo
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            redirect-uri: http://localhost:8080/login/oauth2/code/google
+            scope:
+              - email
+              - profile
+
 
 
 

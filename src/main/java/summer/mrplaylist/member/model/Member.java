@@ -19,6 +19,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import summer.mrplaylist.common.dto.OAuth2Attributes;
+import summer.mrplaylist.member.constant.OAuthProvider;
 import summer.mrplaylist.member.constant.Role;
 import summer.mrplaylist.member.dto.AddMemberRequestDto;
 import summer.mrplaylist.member.dto.UpdateMemberRequestDto;
@@ -49,6 +51,10 @@ public class Member {
 	private String profileImg;
 
 	@Enumerated(EnumType.STRING)
+	@Column(name = "oauth_provider")
+	private OAuthProvider oAuthProvider;
+
+	@Enumerated(EnumType.STRING)
 	@Column(name = "role", nullable = false)
 	private Role role;
 
@@ -61,10 +67,11 @@ public class Member {
 	private LocalDateTime modifiedAt;
 
 	@Builder
-	public Member(String email, String password, String nickname, Role role) {
+	public Member(String email, String password, String nickname, String profileImg, Role role) {
 		this.email = email;
 		this.password = password;
 		this.nickname = nickname;
+		this.profileImg = profileImg;
 		this.role = role;
 	}
 

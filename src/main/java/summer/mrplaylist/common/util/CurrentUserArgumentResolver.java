@@ -10,7 +10,7 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import lombok.extern.slf4j.Slf4j;
-import summer.mrplaylist.common.model.UserDetailsImpl;
+import summer.mrplaylist.common.model.UserPrincipal;
 
 @Slf4j
 public class CurrentUserArgumentResolver implements HandlerMethodArgumentResolver {
@@ -28,7 +28,7 @@ public class CurrentUserArgumentResolver implements HandlerMethodArgumentResolve
 			return null;
 		}
 
-		UserDetailsImpl principal = (UserDetailsImpl)authentication.getPrincipal();
+		UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
 		if (principal == null) {
 			return null;
 		}

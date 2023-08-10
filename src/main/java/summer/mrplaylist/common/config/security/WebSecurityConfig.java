@@ -1,5 +1,8 @@
 package summer.mrplaylist.common.config.security;
 
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -7,14 +10,20 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import lombok.RequiredArgsConstructor;
 import summer.mrplaylist.common.config.jwt.ExceptionHandlerFilter;
 import summer.mrplaylist.common.config.jwt.JwtAuthenticationFilter;
+import summer.mrplaylist.common.service.CustomOAuth2UserService;
 import summer.mrplaylist.common.service.JwtTokenProvider;
+import summer.mrplaylist.common.util.OAuth2AuthenticationSuccessHandler;
+
+import java.io.IOException;
 
 @Configuration
 @RequiredArgsConstructor
@@ -22,6 +31,8 @@ public class WebSecurityConfig {
 
 	private final JwtTokenProvider jwtTokenProvider;
 	private final ExceptionHandlerFilter exceptionHandlerFilter;
+	private final CustomOAuth2UserService customOAuth2UserService;
+	private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -37,6 +48,12 @@ public class WebSecurityConfig {
 				.anyRequest().authenticated())
 			.addFilterBefore(exceptionHandlerFilter, JwtAuthenticationFilter.class);
 
+		http.oauth2Login(oauth2 -> oauth2.userInfoEndpoint(
+			userInfoEndpointConfig -> userInfoEndpointConfig
+				.userService(customOAuth2UserService))
+				.successHandler(oAuth2AuthenticationSuccessHandler)
+			);
+
 		return http.build();
 
 	}
@@ -45,5 +62,7 @@ public class WebSecurityConfig {
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
+
+
 
 }
