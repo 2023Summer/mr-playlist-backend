@@ -31,7 +31,7 @@ public class MusicQRepo {
 		List<Music> findMusic = queryFactory.selectFrom(qMusic)
 			.join(qMusic.artist, qMainArtist).fetchJoin()
 			.where(containName(cond.getWord())
-				.or(likeArtist(cond)))
+				.or(likeArtist(cond.getWord())))
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
 			.orderBy()
@@ -40,8 +40,8 @@ public class MusicQRepo {
 		return new PageImpl<>(findMusic, pageable, findMusic.size());
 	}
 
-	private BooleanExpression likeArtist(SearchCond cond) {
-		return qMusic.artist.name.contains(cond.getWord());
+	private BooleanExpression likeArtist(String word) {
+		return qMusic.artist.name.contains(word);
 	}
 
 	private BooleanExpression containName(String word) {
