@@ -29,7 +29,7 @@ public class MusicQRepo {
 
 	public Page<Music> findNameAndArtist(SearchCond cond, Pageable pageable) {
 		List<Music> findMusic = queryFactory.selectFrom(qMusic)
-			.join(qMusic.artist, qMainArtist)
+			.join(qMusic.artist, qMainArtist).fetchJoin()
 			.where(containName(cond.getWord())
 				.or(likeArtist(cond)))
 			.offset(pageable.getOffset())
