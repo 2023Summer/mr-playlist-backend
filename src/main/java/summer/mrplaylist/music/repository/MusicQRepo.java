@@ -13,6 +13,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import summer.mrplaylist.music.model.Music;
+import summer.mrplaylist.music.model.QMainArtist;
 import summer.mrplaylist.music.model.QMusic;
 import summer.mrplaylist.search.dto.SearchCond;
 
@@ -24,10 +25,11 @@ public class MusicQRepo {
 	private final JPAQueryFactory queryFactory;
 
 	QMusic qMusic = QMusic.music;
+	QMainArtist qMainArtist = QMainArtist.mainArtist;
 
 	public Page<Music> findNameAndArtist(SearchCond cond, Pageable pageable) {
-
 		List<Music> findMusic = queryFactory.selectFrom(qMusic)
+			.join(qMusic.artist, qMainArtist)
 			.where(containName(cond.getWord())
 				.or(likeArtist(cond)))
 			.offset(pageable.getOffset())
