@@ -1,13 +1,9 @@
 package summer.mrplaylist.playlist.dto;
 
-import java.util.List;
-
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import summer.mrplaylist.member.model.Member;
+
+import java.util.List;
 
 @Builder
 @AllArgsConstructor

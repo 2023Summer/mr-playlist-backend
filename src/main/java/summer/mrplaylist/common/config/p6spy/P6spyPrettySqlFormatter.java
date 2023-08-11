@@ -1,13 +1,13 @@
 package summer.mrplaylist.common.config.p6spy;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+import com.p6spy.engine.logging.Category;
+import com.p6spy.engine.spy.appender.MessageFormattingStrategy;
 
 import org.hibernate.engine.jdbc.internal.FormatStyle;
 
-import com.p6spy.engine.logging.Category;
-import com.p6spy.engine.spy.appender.MessageFormattingStrategy;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class P6spyPrettySqlFormatter implements MessageFormattingStrategy {
 

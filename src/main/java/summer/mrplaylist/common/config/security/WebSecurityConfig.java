@@ -1,5 +1,7 @@
 package summer.mrplaylist.common.config.security;
 
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,9 +13,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import lombok.RequiredArgsConstructor;
-import summer.mrplaylist.common.config.jwt.ExceptionHandlerFilter;
 import summer.mrplaylist.common.config.jwt.JwtAuthenticationFilter;
+import summer.mrplaylist.common.config.jwt.ExceptionHandlerFilter;
 import summer.mrplaylist.common.service.JwtTokenProvider;
 
 @Configuration

@@ -1,12 +1,13 @@
 package summer.mrplaylist.common.service;
 
-import java.time.Duration;
+import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import lombok.RequiredArgsConstructor;
+import java.time.Duration;
 
 @Service
 @RequiredArgsConstructor

@@ -1,13 +1,14 @@
 package summer.mrplaylist.member.service;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import summer.mrplaylist.common.dto.JwtTokenDto;
 import summer.mrplaylist.common.service.JwtTokenProvider;
+import summer.mrplaylist.common.dto.JwtTokenDto;
 import summer.mrplaylist.common.service.RedisService;
 import summer.mrplaylist.member.constant.MemberConstants;
 import summer.mrplaylist.member.dto.LoginMemberRequestDto;

@@ -1,14 +1,19 @@
 package summer.mrplaylist.common.model;
 
-import java.util.Collection;
-import java.util.List;
+import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import lombok.RequiredArgsConstructor;
+import summer.mrplaylist.member.constant.Role;
 import summer.mrplaylist.member.model.Member;
+
+import java.util.Collection;
+import java.util.List;
 
 @RequiredArgsConstructor
 public class UserDetailsImpl implements UserDetails {

@@ -1,12 +1,12 @@
 package summer.mrplaylist.comment.model;
 
-import static org.assertj.core.api.Assertions.*;
-
 import org.junit.jupiter.api.Test;
 
 import summer.mrplaylist.comment.dto.CommentForm;
 import summer.mrplaylist.member.model.Member;
 import summer.mrplaylist.playlist.model.Playlist;
+
+import static org.assertj.core.api.Assertions.*;
 
 public class CommentTest {
 

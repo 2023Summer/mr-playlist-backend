@@ -1,16 +1,11 @@
 package summer.mrplaylist.music.model;
 
+import jakarta.persistence.*;
+import lombok.*;
+import summer.mrplaylist.music.dto.GroupForm;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import lombok.Builder;
-import lombok.Getter;
-import summer.mrplaylist.music.dto.GroupForm;
 
 @Getter
 @Entity

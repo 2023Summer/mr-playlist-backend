@@ -2,6 +2,7 @@ package summer.mrplaylist.member.model;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder

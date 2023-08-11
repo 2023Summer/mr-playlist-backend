@@ -1,15 +1,10 @@
 package summer.mrplaylist.music.model;
 
-import java.util.ArrayList;
-
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import lombok.Builder;
-import lombok.Getter;
+import jakarta.persistence.*;
+import lombok.*;
 import summer.mrplaylist.music.dto.ArtistForm;
+
+import java.util.ArrayList;
 
 @Entity
 @Getter

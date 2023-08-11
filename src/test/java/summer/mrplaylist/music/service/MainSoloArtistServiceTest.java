@@ -1,10 +1,5 @@
 package summer.mrplaylist.music.service;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.BDDMockito.*;
-
-import java.util.Optional;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -15,6 +10,13 @@ import summer.mrplaylist.music.dto.ArtistForm;
 import summer.mrplaylist.music.model.MainArtist;
 import summer.mrplaylist.music.model.SoloArtist;
 import summer.mrplaylist.music.repository.MainArtistRepository;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.BDDMockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class MainSoloArtistServiceTest {

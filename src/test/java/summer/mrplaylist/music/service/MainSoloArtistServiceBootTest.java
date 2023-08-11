@@ -1,20 +1,23 @@
 package summer.mrplaylist.music.service;
 
-import static org.assertj.core.api.Assertions.*;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import lombok.extern.slf4j.Slf4j;
 import summer.mrplaylist.music.dto.ArtistForm;
 import summer.mrplaylist.music.dto.GroupForm;
 import summer.mrplaylist.music.model.Group;
+import summer.mrplaylist.music.model.MainArtist;
+import summer.mrplaylist.music.repository.MainArtistRepository;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 @Transactional

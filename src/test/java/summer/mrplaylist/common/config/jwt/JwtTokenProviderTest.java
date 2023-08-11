@@ -1,18 +1,19 @@
 package summer.mrplaylist.common.config.jwt;
 
-import static org.assertj.core.api.Assertions.*;
+import io.jsonwebtoken.Jwts;
+import lombok.extern.slf4j.Slf4j;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import io.jsonwebtoken.Jwts;
-import lombok.extern.slf4j.Slf4j;
 import summer.mrplaylist.common.dto.JwtTokenDto;
 import summer.mrplaylist.common.service.JwtTokenProvider;
 import summer.mrplaylist.common.service.RedisService;
 import summer.mrplaylist.member.model.Member;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Slf4j

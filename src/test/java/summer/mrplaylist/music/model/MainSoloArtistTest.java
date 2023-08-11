@@ -1,11 +1,11 @@
 package summer.mrplaylist.music.model;
 
-import static org.assertj.core.api.Assertions.*;
-
 import org.junit.jupiter.api.Test;
 
 import summer.mrplaylist.music.dto.ArtistForm;
 import summer.mrplaylist.music.dto.GroupForm;
+
+import static org.assertj.core.api.Assertions.*;
 
 class MainSoloArtistTest {
 

@@ -1,12 +1,13 @@
 package summer.mrplaylist.common.service;
 
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import lombok.RequiredArgsConstructor;
 import summer.mrplaylist.common.model.UserDetailsImpl;
 import summer.mrplaylist.member.constant.MemberConstants;
 import summer.mrplaylist.member.model.Member;

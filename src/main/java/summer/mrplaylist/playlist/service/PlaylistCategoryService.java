@@ -1,18 +1,19 @@
 package summer.mrplaylist.playlist.service;
 
-import java.util.List;
-import java.util.Optional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import summer.mrplaylist.playlist.model.Category;
 import summer.mrplaylist.playlist.model.Playlist;
 import summer.mrplaylist.playlist.model.PlaylistCategory;
 import summer.mrplaylist.playlist.repository.CategoryRepository;
 import summer.mrplaylist.playlist.repository.PlaylistCategoryRepository;
+
+import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service

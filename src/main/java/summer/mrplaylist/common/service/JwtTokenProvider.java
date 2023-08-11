@@ -1,6 +1,11 @@
 package summer.mrplaylist.common.service;
 
-import java.util.Date;
+import io.jsonwebtoken.Header;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -8,12 +13,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import io.jsonwebtoken.Header;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import summer.mrplaylist.common.config.jwt.JwtProperties;
 import summer.mrplaylist.common.constant.JwtTokenConstants;
 import summer.mrplaylist.common.dto.JwtTokenDto;
@@ -21,6 +20,8 @@ import summer.mrplaylist.common.exception.TokenNotValidateException;
 import summer.mrplaylist.member.constant.MemberConstants;
 import summer.mrplaylist.member.model.Member;
 import summer.mrplaylist.member.repository.MemberRepository;
+
+import java.util.Date;
 
 @RequiredArgsConstructor
 @Service
