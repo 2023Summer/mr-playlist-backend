@@ -31,6 +31,7 @@ class MusicServiceTest {
 	private MainArtistService mainArtistService;
 
 	@Test
+
 	public void createMusic() throws Exception {
 		//given
 		MusicForm musicForm = MusicForm.builder()
@@ -57,6 +58,7 @@ class MusicServiceTest {
 		musicForm.setArtistFormList(artistList);
 
 		given(mainArtistService.createArtist(any())).willReturn(soloArtist);
+
 		given(musicRepository.save(any())).willReturn(music);
 		//when
 		Music savedMusic = musicService.create(musicForm);

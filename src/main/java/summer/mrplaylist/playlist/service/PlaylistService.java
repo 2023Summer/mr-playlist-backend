@@ -70,9 +70,8 @@ public class PlaylistService {
 	}
 
 	public Playlist findPlaylist(Long playlistId) {
-		Playlist playlist = plRepository.findById(playlistId)
+		return plRepository.findById(playlistId)
 			.orElseThrow(() -> new IllegalArgumentException(NOT_FOUND_PLAYLIST));
-		return playlist;
 	}
 
 }

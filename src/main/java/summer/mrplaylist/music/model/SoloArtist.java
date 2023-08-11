@@ -16,6 +16,7 @@ import summer.mrplaylist.music.dto.ArtistForm;
 @Getter
 @DiscriminatorValue("A")
 @NoArgsConstructor
+
 public class SoloArtist extends MainArtist {
 
 	// 그룹
@@ -44,5 +45,4 @@ public class SoloArtist extends MainArtist {
 	public void deleteGroup() {
 		this.group.deleteArtist(this);
 	}
-
 }

@@ -10,7 +10,6 @@ plugins {
     id 'org.springframework.boot' version '3.1.1'
     id 'io.spring.dependency-management' version '1.1.0'
     id 'org.ec4j.editorconfig' version '0.0.3'
-
 }
 
 group = 'summer'
@@ -86,7 +85,6 @@ dependencies {
 
     //configurationProperties 관련 의존성 추가
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
-
     // excel 관련 의존성 추가
     implementation 'org.apache.poi:poi:5.2.2'
     implementation 'org.apache.poi:poi-ooxml:5.2.2'

@@ -25,6 +25,7 @@ public class MusicService {
 	private final MainArtistService mainArtistService;
 
 	@Transactional
+
 	public Music create(MusicForm musicForm) {
 		if (musicForm.getGroupForm() != null) {
 			Group Group = mainArtistService.createGroupArtist(musicForm.getGroupForm(), musicForm.getArtistFormList());
@@ -61,6 +62,7 @@ public class MusicService {
 		Music music = musicRepository.findById(musicId)
 			.orElseThrow(() -> new IllegalStateException(MusicConstants.NOT_FOUND));
 		return music;
+
 	}
 
 }

@@ -40,4 +40,6 @@ public class P6spyPrettySqlFormatter implements MessageFormattingStrategy {
 
 		return sql;
 	}
+
 }
+
