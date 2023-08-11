@@ -7,6 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import summer.mrplaylist.common.constant.RedisConstants;
+import summer.mrplaylist.common.service.RedisService;
 import summer.mrplaylist.music.repository.MainArtistQRepo;
 import summer.mrplaylist.music.repository.MusicQRepo;
 import summer.mrplaylist.playlist.repository.PlaylistQRepo;
@@ -21,8 +23,11 @@ public class SearchService {
 	private final PlaylistQRepo playlistQRepo;
 	private final MusicQRepo musicQRepo;
 	private final MainArtistQRepo mainArtistQRepo;
+	private final RedisService redisService;
 
 	public Page<?> search(SearchCond cond, Pageable pageable) {
+
+		redisService.saveAndIncrement(RedisConstants.SEARCH, cond.getWord());
 
 		var resultList = switch (cond.getTopic()) {
 			case MUSIC -> musicQRepo.findNameAndArtist(cond, pageable);
