@@ -6,21 +6,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
 class RedisConfigTest {
-    @Autowired
-    RedisTemplate<String, Object> redisTemplate;
+	@Autowired
+	RedisTemplate<String, Object> redisTemplate;
 
-    @Test
-    public void redisTest() throws Exception {
-        String email = "test@naver.com";
-        String value = "test";
-        redisTemplate.opsForValue().set(email, value);
+	@Test
+	public void redisTest() throws Exception {
+		String email = "test@naver.com";
+		String value = "test";
+		redisTemplate.opsForValue().set(email, value);
 
-        Assertions.assertThat(value).isEqualTo(redisTemplate.opsForValue().get(email));
-    }
-
+		Assertions.assertThat(value).isEqualTo(redisTemplate.opsForValue().get(email));
+	}
 
 }
