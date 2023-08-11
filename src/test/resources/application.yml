@@ -36,5 +36,9 @@ spring:
     debug: true
     default-encoding: UTF-8
 
+logging:
+  level:
+    org.springframework.core.LocalVariableTableParameterNameDiscoverer: error
+
 
 
