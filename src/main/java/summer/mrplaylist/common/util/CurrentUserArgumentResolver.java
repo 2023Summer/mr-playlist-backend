@@ -28,7 +28,7 @@ public class CurrentUserArgumentResolver implements HandlerMethodArgumentResolve
 			return null;
 		}
 
-		UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
+		UserPrincipal principal = (UserPrincipal)authentication.getPrincipal();
 		if (principal == null) {
 			return null;
 		}

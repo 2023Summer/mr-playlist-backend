@@ -19,7 +19,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import summer.mrplaylist.common.dto.OAuth2Attributes;
 import summer.mrplaylist.member.constant.OAuthProvider;
 import summer.mrplaylist.member.constant.Role;
 import summer.mrplaylist.member.dto.AddMemberRequestDto;

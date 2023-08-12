@@ -20,7 +20,7 @@ public class SoloArtist extends MainArtist {
 
 	// 그룹
 	@ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "group_artist_id")
+	@JoinColumn(name = "group_artist_id")
 	private Group group;
 
 	@Builder

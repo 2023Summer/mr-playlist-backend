@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import summer.mrplaylist.common.config.jwt.JwtProperties;
 import summer.mrplaylist.common.dto.JwtTokenDto;
+import summer.mrplaylist.common.dto.Response;
 import summer.mrplaylist.common.service.JwtTokenProvider;
 import summer.mrplaylist.member.dto.AddMemberRequestDto;
 import summer.mrplaylist.member.dto.LoginMemberRequestDto;
@@ -44,7 +45,7 @@ public class MemberController {
 	public ResponseEntity<String> update(@PathVariable Long id,
 		@RequestBody UpdateMemberRequestDto requestDto) {
 		memberService.update(id, requestDto);
-		return ResponseEntity.ok("회원 수정");
+		return Response
 	}
 
 	@PostMapping("/auth")
@@ -75,6 +76,11 @@ public class MemberController {
 		return ResponseEntity.ok(tokenDto);
 	}
 
+	@GetMapping("/login")
+	public ResponseEntity<String> hi() {
+		return ResponseEntity.ok("hi");
+	}
+
 	@PostMapping("/reissue")
 	public ResponseEntity<String> reissueAccessToken(@RequestBody JwtTokenDto tokenDto,
 		HttpServletRequest request,
@@ -88,7 +94,7 @@ public class MemberController {
 	@GetMapping("/login/oauth2/code/{registartionId}")
 	public ResponseEntity<String> googleLoginTest(@RequestParam String code) {
 		log.info("code : {}", code);
-//		log.info("registrationId: {}", registrationId);
+		//		log.info("registrationId: {}", registrationId);
 		return ResponseEntity.ok("hi");
 	}
 
