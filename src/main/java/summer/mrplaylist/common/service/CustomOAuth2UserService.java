@@ -37,16 +37,15 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 			oAuth2User.getAttributes());
 
 		// return new DefaultOAuth2User(oAuth2User);
-		Member socialMember = attributes.toEntity(registrationId);
-		socialJoin(socialMember);
+		Member socialMember = saveOrUpdate(attributes, registrationId);
 		return new UserPrincipal(socialMember, attributes.getAttributes());
 	}
 
-	public void socialJoin(Member member) {
-		if (memberRepository.existsByEmail(member.getEmail())) {
-			throw new IllegalStateException("이미 존재하는 이메일입니다."); // 이후 같은 부분 생길 시
-		}
-		memberRepository.save(member);
+	public Member saveOrUpdate(OAuth2Attributes attributes, String registrationId) {
+		Member member = memberRepository.findByEmail(attributes.getEmail())
+			.map(entity -> entity.updateSocialMember(attributes))
+			.orElse(attributes.toEntity(registrationId));
+		return memberRepository.save(member);
 	}
 
 }

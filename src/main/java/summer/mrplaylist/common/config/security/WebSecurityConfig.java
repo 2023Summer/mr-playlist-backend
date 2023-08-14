@@ -37,12 +37,11 @@ public class WebSecurityConfig {
 				SessionCreationPolicy.STATELESS)) // 세션 미사용
 			.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
 			.authorizeHttpRequests(request -> request
-				.requestMatchers("/api/members/**").permitAll()
+				.requestMatchers("/login/**", "/api/members/**").permitAll()
 				.anyRequest().authenticated())
 			.addFilterBefore(exceptionHandlerFilter, JwtAuthenticationFilter.class);
 
 		http.oauth2Login(oauth2 -> oauth2
-			.loginPage("/api/members/login")
 			.successHandler(oAuth2AuthenticationSuccessHandler)
 			.userInfoEndpoint(
 				userInfoEndpointConfig -> userInfoEndpointConfig

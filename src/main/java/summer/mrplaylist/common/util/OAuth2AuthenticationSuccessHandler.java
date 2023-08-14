@@ -3,7 +3,7 @@ package summer.mrplaylist.common.util;
 import java.io.IOException;
 
 import org.springframework.security.core.Authentication;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -19,8 +19,9 @@ import summer.mrplaylist.common.service.JwtTokenProvider;
 @RequiredArgsConstructor
 @Component
 @Slf4j
-public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccessHandler {
+public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 	private final JwtTokenProvider jwtTokenProvider;
+	private static final String REDIRECT_URI = "http://localhost:8080/login/oauth2/redirect";
 
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -31,16 +32,15 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
 		JwtTokenDto jwtTokenDto = jwtTokenProvider.createAllToken(userPrincipal.getMember());
 
 		String targetUrl = makeRedirectUrl(jwtTokenDto);
-		log.info("targetUrl : {}", targetUrl);
-		// if (response.isCommitted()) {
-		// 	logger.debug("응답이 이미 커밋된 상태입니다. " + targetUrl + "로 리다이렉트하도록 바꿀 수 없습니다.");
-		// 	return;
-		// }
-		// getRedirectStrategy().sendRedirect(request, response, targetUrl);
+		if (response.isCommitted()) {
+			logger.debug("응답이 이미 커밋된 상태입니다. " + targetUrl + "로 리다이렉트 하도록 바꿀 수 없습니다.");
+			return;
+		}
+		getRedirectStrategy().sendRedirect(request, response, targetUrl);
 	}
 
 	private String makeRedirectUrl(JwtTokenDto jwtTokenDto) {
-		return UriComponentsBuilder.fromUriString("/api/members/login")
+		return UriComponentsBuilder.fromUriString(REDIRECT_URI)
 			.queryParam("token", jwtTokenDto)
 			.build().toUriString();
 	}

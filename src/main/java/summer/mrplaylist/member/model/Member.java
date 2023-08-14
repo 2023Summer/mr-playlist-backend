@@ -19,6 +19,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import summer.mrplaylist.common.dto.OAuth2Attributes;
 import summer.mrplaylist.member.constant.OAuthProvider;
 import summer.mrplaylist.member.constant.Role;
 import summer.mrplaylist.member.dto.AddMemberRequestDto;
@@ -83,11 +84,17 @@ public class Member {
 			.build();
 	}
 
-	public void update(UpdateMemberRequestDto requestDto) {
+	public void updateMember(UpdateMemberRequestDto requestDto) {
 		this.email = requestDto.getEmail();
 		this.password = requestDto.getPassword();
 		this.nickname = requestDto.getNickname();
 		this.profileImg = requestDto.getProfileImg();
+	}
+
+	public Member updateSocialMember(OAuth2Attributes attributes) {
+		this.nickname = attributes.getName();
+		this.profileImg = attributes.getProfileImg();
+		return this;
 	}
 
 	public void setPassword(String password) {
