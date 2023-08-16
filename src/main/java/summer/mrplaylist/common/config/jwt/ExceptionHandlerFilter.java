@@ -32,7 +32,7 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
 		response.setStatus(status.value());
 		response.setContentType("application/json; charset=UTF-8");
 
-		response.getWriter().write(
+		response.getWriter().print(
 			new ErrorResponse(
 				LocalDateTime.now(),
 				e.getMessage()

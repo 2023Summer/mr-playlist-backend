@@ -33,8 +33,9 @@ public class WebSecurityConfig {
 				SessionCreationPolicy.STATELESS)) // 세션 미사용
 			.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
 			.authorizeHttpRequests(request -> request
-				.requestMatchers("/api/members", "/api/members/**").permitAll()
-				.anyRequest().authenticated())
+				// .requestMatchers("/api/members", "/api/members/**").permitAll()
+				// .anyRequest().authenticated())
+				.anyRequest().permitAll()) // controller 임시 테스트
 			.addFilterBefore(exceptionHandlerFilter, JwtAuthenticationFilter.class);
 
 		return http.build();

@@ -16,7 +16,6 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.transaction.annotation.Transactional;
 
-import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import summer.mrplaylist.common.constant.RedisConstants;
 import summer.mrplaylist.search.dto.SearchCond;
@@ -48,10 +47,10 @@ class SearchServiceTest {
 		assertThat(resultList.getContent()).isNotNull();
 	}
 
-	@PostConstruct
-	public void initRedis() {
-		redisTemplate.delete(RedisConstants.SEARCH);
-	}
+	// @PostConstruct
+	// public void initRedis() {
+	// 	redisTemplate.delete(RedisConstants.SEARCH);
+	// }
 
 	@Test
 	@DisplayName("자주 검색한 키워드 캐싱")

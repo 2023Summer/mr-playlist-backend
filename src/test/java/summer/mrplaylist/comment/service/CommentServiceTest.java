@@ -3,8 +3,6 @@ package summer.mrplaylist.comment.service;
 import static org.assertj.core.api.Assertions.*;
 import static summer.mrplaylist.CreateMethod.*;
 
-import java.util.List;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +18,6 @@ import summer.mrplaylist.comment.model.Comment;
 import summer.mrplaylist.member.constant.Role;
 import summer.mrplaylist.member.model.Member;
 import summer.mrplaylist.member.repository.MemberRepository;
-import summer.mrplaylist.music.dto.MusicForm;
 import summer.mrplaylist.playlist.dto.PlaylistForm;
 import summer.mrplaylist.playlist.model.Playlist;
 import summer.mrplaylist.playlist.service.PlaylistService;
@@ -113,10 +110,9 @@ public class CommentServiceTest {
 
 	private Playlist getPlaylist(Member member) {
 		PlaylistForm playlistForm = getPlaylistForm(member);
+		playlistForm.setMusicFormList(getMusicFormList());
 
-		List<MusicForm> musicFormList = getMusicFormList();
-
-		Playlist playlist = playlistService.create(playlistForm, musicFormList);
+		Playlist playlist = playlistService.create(playlistForm);
 		return playlist;
 	}
 }

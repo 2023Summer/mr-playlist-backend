@@ -72,12 +72,6 @@ public class XlsxFileParser {
 			String plDescription = readCell(plRow, 1);
 			List<String> plCategory = Arrays.asList(readCell(plRow, 2).split(","));
 
-			PlaylistForm playlistForm = PlaylistForm.builder()
-				.plName(plName)
-				.plDescription(plDescription)
-				.categoryNameList(plCategory)
-				.build();
-
 			List<MusicForm> musicFormList = new ArrayList<>();
 			for (int rowIdx = plIndexList.get(i); rowIdx < plIndexList.get(i + 1); rowIdx++) {
 				XSSFRow row = sheet.getRow(rowIdx);
@@ -130,7 +124,13 @@ public class XlsxFileParser {
 					musicFormList.add(musicForm);
 				}
 			}
-			playlistService.create(playlistForm, musicFormList);
+			PlaylistForm playlistForm = PlaylistForm.builder()
+				.plName(plName)
+				.plDescription(plDescription)
+				.categoryNameList(plCategory)
+				.musicFormList(musicFormList)
+				.build();
+			playlistService.create(playlistForm);
 		}
 
 	}

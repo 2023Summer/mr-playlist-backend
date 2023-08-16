@@ -46,7 +46,7 @@ public abstract class MainArtist {
 	}
 
 	public MainArtist update(ArtistUpdateForm updateForm) {
-		this.description = updateForm.getDescription();
+		this.description = addDescription(updateForm.getDescription());
 		this.name = updateForm.getName();
 		return this;
 	}
