@@ -37,7 +37,8 @@ public abstract class MainArtist {
 	}
 
 	public String addDescription(String description) {
-		this.description = this.getDescription() + ", " + description;
+		if (!description.isBlank())
+			this.description = this.getDescription() + ", " + description;
 		return description;
 	}
 
