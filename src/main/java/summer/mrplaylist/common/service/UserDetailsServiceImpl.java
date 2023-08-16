@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import summer.mrplaylist.common.model.UserDetailsImpl;
+import summer.mrplaylist.common.model.UserPrincipal;
 import summer.mrplaylist.member.constant.MemberConstants;
 import summer.mrplaylist.member.model.Member;
 import summer.mrplaylist.member.repository.MemberRepository;
@@ -23,6 +23,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		Member findMember = memberRepository.findByEmail(email)
 			.orElseThrow(() -> new IllegalArgumentException(MemberConstants.NOT_EXISTS_MEMBER));
-		return new UserDetailsImpl(findMember);
+		return new UserPrincipal(findMember);
 	}
 }

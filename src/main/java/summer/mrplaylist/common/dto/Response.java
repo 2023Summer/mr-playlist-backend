@@ -1,6 +1,7 @@
 package summer.mrplaylist.common.dto;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Data;
@@ -9,7 +10,7 @@ import lombok.Data;
 public class Response<T> {
 
 	private LocalDateTime date;
-	private List<T> data;
+	private List<T> data = new ArrayList<>();
 
 	public Response(T data) {
 		this.date = LocalDateTime.now();

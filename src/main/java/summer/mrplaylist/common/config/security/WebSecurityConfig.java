@@ -14,7 +14,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import lombok.RequiredArgsConstructor;
 import summer.mrplaylist.common.config.jwt.ExceptionHandlerFilter;
 import summer.mrplaylist.common.config.jwt.JwtAuthenticationFilter;
+import summer.mrplaylist.common.service.CustomOAuth2UserService;
 import summer.mrplaylist.common.service.JwtTokenProvider;
+import summer.mrplaylist.common.util.OAuth2AuthenticationSuccessHandler;
 
 @Configuration
 @RequiredArgsConstructor
@@ -22,6 +24,8 @@ public class WebSecurityConfig {
 
 	private final JwtTokenProvider jwtTokenProvider;
 	private final ExceptionHandlerFilter exceptionHandlerFilter;
+	private final CustomOAuth2UserService customOAuth2UserService;
+	private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -33,9 +37,17 @@ public class WebSecurityConfig {
 				SessionCreationPolicy.STATELESS)) // 세션 미사용
 			.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
 			.authorizeHttpRequests(request -> request
-				.requestMatchers("/api/members", "/api/members/**").permitAll()
+				.requestMatchers("/login/**", "/api/members/**").permitAll()
 				.anyRequest().authenticated())
 			.addFilterBefore(exceptionHandlerFilter, JwtAuthenticationFilter.class);
+
+		http.oauth2Login(oauth2 -> oauth2
+			.successHandler(oAuth2AuthenticationSuccessHandler)
+			.userInfoEndpoint(
+				userInfoEndpointConfig -> userInfoEndpointConfig
+					.userService(customOAuth2UserService))
+
+		);
 
 		return http.build();
 
