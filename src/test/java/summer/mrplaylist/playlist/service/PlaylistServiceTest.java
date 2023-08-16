@@ -39,14 +39,7 @@ public class PlaylistServiceTest {
 		Member member = getMember();
 		member = memberRepository.save(member);
 
-		List<String> categoryNameList = getCategoryNameList();
-
-		PlaylistForm playlistForm = PlaylistForm.builder()
-			.plName("킹 누의 명곡")
-			.plDescription("노동요")
-			.categoryNameList(categoryNameList)
-			.member(member)
-			.build();
+		PlaylistForm playlistForm = getPlaylistForm(member);
 
 		List<MusicForm> musicFormList = getMusicFormList();
 		//when

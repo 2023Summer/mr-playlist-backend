@@ -10,6 +10,9 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Configuration
 @EnableRedisRepositories
 public class RedisConfig {
@@ -24,7 +27,7 @@ public class RedisConfig {
 		RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
 		redisStandaloneConfiguration.setHostName(redisHost);
 		redisStandaloneConfiguration.setPort(redisPort);
-
+		log.info("redis connection success");
 		return new LettuceConnectionFactory(redisStandaloneConfiguration);
 	}
 

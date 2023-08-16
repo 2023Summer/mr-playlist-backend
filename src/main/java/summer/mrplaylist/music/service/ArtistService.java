@@ -2,16 +2,13 @@ package summer.mrplaylist.music.service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import summer.mrplaylist.music.constant.ArtistConstants;
 import summer.mrplaylist.music.dto.ArtistForm;
-import summer.mrplaylist.music.dto.ArtistUpdateForm;
 import summer.mrplaylist.music.dto.GroupForm;
 import summer.mrplaylist.music.model.Group;
 import summer.mrplaylist.music.model.MainArtist;
@@ -22,7 +19,7 @@ import summer.mrplaylist.music.repository.MainArtistRepository;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class MainArtistService {
+public class ArtistService {
 
 	private final MainArtistRepository mainArtistRepository;
 
@@ -33,13 +30,7 @@ public class MainArtistService {
 		List<SoloArtist> soloArtists = artistFormList.stream()
 			.map(artistForm -> createArtist(artistForm))
 			.toList();
-		log.info("SoloArtist = {}", soloArtists);
-
-		soloArtists = soloArtists.stream()
-			.filter(artist -> !group.getGroupSoloArtistList().contains(artist))
-			.collect(Collectors.toList());
-		log.info("Not duplicate artist = {}", soloArtists);
-
+		log.info("{}", soloArtists);
 		for (SoloArtist soloArtist : soloArtists) {
 			group.addArtist(soloArtist);
 		}
@@ -81,31 +72,5 @@ public class MainArtistService {
 			Group savedGroup = mainArtistRepository.save(group);
 			return savedGroup;
 		}
-	}
-
-	@Transactional
-	// 이름 설명 수정 (그룹, 가수)
-	public MainArtist update(ArtistUpdateForm artistUpdateForm) {
-		MainArtist mainArtist = findMainArtist(artistUpdateForm.getId());
-		mainArtist.update(artistUpdateForm);
-		return mainArtist;
-	}
-
-	/**
-	 * 솔로가수 삭제
-	 */
-	@Transactional
-	public void deleteSoloArtist(Long artistId) {
-		SoloArtist soloArtist = (SoloArtist)mainArtistRepository.findById(artistId)
-			.orElseThrow(() -> new IllegalStateException(ArtistConstants.NOT_FOUND));
-
-		soloArtist.deleteGroup();
-		mainArtistRepository.delete(soloArtist);
-	}
-
-	public MainArtist findMainArtist(Long id) {
-		MainArtist mainArtist = mainArtistRepository.findById(id)
-			.orElseThrow(() -> new IllegalStateException(ArtistConstants.NOT_FOUND));
-		return mainArtist;
 	}
 }

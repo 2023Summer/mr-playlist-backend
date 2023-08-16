@@ -1,3 +1,6 @@
+server:
+  shutdown: graceful
+
 spring:
   profiles:
     default: local
@@ -11,25 +14,18 @@ spring:
       on-profile: local
 
   datasource:
-    url: jdbc:postgresql://0.0.0.0:5432/playlist
-    username: summer
-    password: hothot123
     driver-class-name: org.postgresql.Driver
 
   jpa:
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
 
     properties:
       hibernate:
         format_sql: true
-
-  data:
-    redis:
-      host: 127.0.0.1
-      port: 6379
+        default_batch_fetch_size: 100
 
   mail:
     host: smtp.gmail.com
@@ -45,10 +41,34 @@ spring:
     access-token-expiration: 180000 # 30분
     refresh-token-expiration: 1296000000 # 15일
 
+logging:
+  level:
+    org.springframework.core.LocalVariableTableParameterNameDiscoverer: error
+---
+spring:
+  config:
+    activate:
+      on-profile: local
 
+  datasource:
+    url: jdbc:postgresql://0.0.0.0:5432/playlist
+    username: summer
+    password: hothot123
 
+  jpa:
+    hibernate:
+      ddl-auto: create
 
+  data:
+    redis:
+      host: 0.0.0.0
+      port: 6379
 
+  security:
+    user:
+      name: admin
+      password: 1234
+      roles: USER, ADMIN
 
 decorator:
   datasource:
@@ -60,7 +80,18 @@ spring:
     activate:
       on-profile: prod
 
+  datasource:
+    url: jdbc:postgresql://0.0.0.0:5432/playlist
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+  data:
+    redis:
+      host: 0.0.0.0
+      port: 6379
+
 decorator:
   datasource:
     p6spy:
       enable-logging: false
+

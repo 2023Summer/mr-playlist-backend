@@ -16,6 +16,7 @@ import summer.mrplaylist.music.dto.ArtistForm;
 @Getter
 @DiscriminatorValue("A")
 @NoArgsConstructor
+
 public class SoloArtist extends MainArtist {
 
 	// 그룹
@@ -26,7 +27,6 @@ public class SoloArtist extends MainArtist {
 	@Builder
 	public SoloArtist(Long id, String name, String description, Group group) {
 		super(id, name, description, new ArrayList<>());
-
 		this.group = group;
 	}
 
@@ -40,5 +40,9 @@ public class SoloArtist extends MainArtist {
 
 	public void setGroup(Group group) {
 		this.group = group;
+	}
+
+	public void deleteGroup() {
+		this.group.deleteArtist(this);
 	}
 }

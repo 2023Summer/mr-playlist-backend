@@ -35,4 +35,8 @@ public class RedisService {
 		template.delete(key);
 	}
 
+	public void saveAndIncrement(String topic, String word) {
+		template.opsForZSet().incrementScore(topic, word, 1);
+	}
 }
+

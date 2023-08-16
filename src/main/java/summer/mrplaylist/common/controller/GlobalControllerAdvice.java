@@ -20,6 +20,7 @@ public class GlobalControllerAdvice {
 	@ExceptionHandler(value = Exception.class)
 	public ErrorResponse exception(Exception e) {
 		log.error("error : {}", e);
+
 		return createErrorResponse(e.getMessage());
 	}
 
@@ -27,6 +28,7 @@ public class GlobalControllerAdvice {
 	@ExceptionHandler(value = {IllegalStateException.class, IllegalArgumentException.class})
 	public ErrorResponse badRequest(RuntimeException e) {
 		log.info("badRequest error: {}", e);
+
 		return createErrorResponse(e.getMessage());
 	}
 
@@ -34,6 +36,7 @@ public class GlobalControllerAdvice {
 	@ExceptionHandler(value = BadCredentialsException.class)
 	public ErrorResponse badCredentialsException(BadCredentialsException e) {
 		log.info("BadCredentialsException error: {}", e);
+
 		return createErrorResponse(e.getMessage());
 	}
 

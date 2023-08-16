@@ -48,4 +48,9 @@ public class Group extends MainArtist {
 		this.totalArtist += 1;
 	}
 
+	public void deleteArtist(SoloArtist soloArtist) {
+		this.totalArtist -= 1;
+		this.groupSoloArtistList.remove(soloArtist);
+	}
+
 }

@@ -14,8 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.extern.slf4j.Slf4j;
 import summer.mrplaylist.music.dto.ArtistForm;
+import summer.mrplaylist.music.dto.ArtistUpdateForm;
 import summer.mrplaylist.music.dto.GroupForm;
 import summer.mrplaylist.music.model.Group;
+import summer.mrplaylist.music.model.MainArtist;
+import summer.mrplaylist.music.model.SoloArtist;
 
 @Slf4j
 @Transactional
@@ -26,7 +29,7 @@ public class MainArtistServiceBootTest {
 	private MainArtistService mainArtistService;
 
 	@Test
-	public void createGroupArtist() throws Exception {
+	public Group createGroupArtist() throws Exception {
 		//given
 		List<ArtistForm> artistForms = new ArrayList<>();
 		GroupForm groupForm = new GroupForm("빅뱅", "YG 인기 남그룹");
@@ -41,6 +44,7 @@ public class MainArtistServiceBootTest {
 			"GD");
 
 		log.info("getSoloArtist = {}", group.getGroupSoloArtistList());
+		return group;
 	}
 
 	@Test
@@ -58,5 +62,35 @@ public class MainArtistServiceBootTest {
 		assertThat(group.getTotalArtist()).isEqualTo(2);
 
 		log.info("getSoloArtist = {}", group.getGroupSoloArtistList());
+	}
+
+	@Test
+	@DisplayName("가수 삭제")
+	public void deleteSinger() throws Exception {
+		Group group = createGroupArtist();
+
+		SoloArtist soloArtist = group.getGroupSoloArtistList().stream()
+			.filter(m -> m.getName().equals("GD"))
+			.findFirst().get();
+
+		mainArtistService.deleteSoloArtist(soloArtist.getId());
+
+		assertThat(group.getGroupSoloArtistList().stream().map(n -> n.getName()).collect(Collectors.toList()))
+			.doesNotContain("GD");
+
+		assertThat(group.getTotalArtist()).isEqualTo(1);
+	}
+
+	@Test
+	@DisplayName("그룹 정보 수정")
+	public void editGroupInfo() throws Exception {
+		Group group = createGroupArtist();
+
+		ArtistUpdateForm artistUpdateForm = new ArtistUpdateForm(group.getId(), "BigBang", "맨정신이 나아");
+
+		MainArtist mainArtist = mainArtistService.update(artistUpdateForm);
+
+		assertThat(mainArtist.getName()).isEqualTo("BigBang");
+		assertThat(mainArtist.getDescription()).isEqualTo("맨정신이 나아");
 	}
 }

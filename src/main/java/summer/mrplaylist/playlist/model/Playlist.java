@@ -24,9 +24,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import summer.mrplaylist.comment.model.Comment;
 import summer.mrplaylist.member.model.Member;
 import summer.mrplaylist.music.model.Music;
 import summer.mrplaylist.playlist.dto.PlaylistForm;
+import summer.mrplaylist.playlist.dto.PlaylistUpdateForm;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -47,6 +49,9 @@ public class Playlist {
 	@Column(name = "music_count", nullable = false)
 	private Integer musicCount;
 
+	@Column(name = "comment_count", nullable = false)
+	private Integer commentCount;
+
 	@Column(name = "name", length = 100, nullable = false)
 	private String name;
 
@@ -65,12 +70,17 @@ public class Playlist {
 	@OneToMany(mappedBy = "playlist", cascade = CascadeType.PERSIST)
 	private List<Music> musicList = new ArrayList<>();
 
+	@Builder.Default
+	@OneToMany(mappedBy = "playlist", cascade = CascadeType.REMOVE)
+	private List<Comment> commentList = new ArrayList<>();
+
 	public static Playlist createPlaylist(PlaylistForm playlistForm) {
 		return Playlist.builder()
 			.name(playlistForm.getPlName())
 			.description(playlistForm.getPlDescription())
 			.views(0)
 			.musicCount(0)
+			.commentCount(0)
 			.member(playlistForm.getMember())
 			.build();
 	}
@@ -80,4 +90,23 @@ public class Playlist {
 		this.musicCount += 1;
 	}
 
+	public void addComment(Comment comment) {
+		this.commentList.add(comment);
+		this.commentCount += 1;
+	}
+
+	public void removeComment(Comment comment) {
+		this.commentList.remove(comment);
+		this.commentCount -= 1;
+	}
+
+	public void updateInfo(PlaylistUpdateForm updateForm) {
+		this.name = updateForm.getPlName();
+		this.description = updateForm.getPlDescription();
+	}
+
+	public void deleteMusic(Music music) {
+		this.musicCount -= 1;
+		this.musicList.remove(music);
+	}
 }
