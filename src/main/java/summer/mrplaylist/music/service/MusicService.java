@@ -9,11 +9,10 @@ import summer.mrplaylist.music.constant.MusicConstants;
 import summer.mrplaylist.music.dto.ArtistForm;
 import summer.mrplaylist.music.dto.MusicForm;
 import summer.mrplaylist.music.dto.MusicUpdateForm;
-import summer.mrplaylist.music.model.Group;
 import summer.mrplaylist.music.model.MainArtist;
 import summer.mrplaylist.music.model.Music;
-import summer.mrplaylist.music.model.SoloArtist;
 import summer.mrplaylist.music.repository.MusicRepository;
+import summer.mrplaylist.playlist.model.Playlist;
 
 @Slf4j
 @Service
@@ -25,19 +24,29 @@ public class MusicService {
 	private final MainArtistService mainArtistService;
 
 	@Transactional
-
 	public Music create(MusicForm musicForm) {
+		MainArtist artist = null;
 		if (musicForm.getGroupForm() != null) {
-			Group Group = mainArtistService.createGroupArtist(musicForm.getGroupForm(), musicForm.getArtistFormList());
-			Music music = Music.createMusic(musicForm, Group);
-			return musicRepository.save(music);
+			artist = mainArtistService.createGroupArtist(musicForm.getGroupForm(), musicForm.getArtistFormList());
 		} else {
 			ArtistForm artistForm = musicForm.getArtistFormList().get(0);
-
-			SoloArtist artist = mainArtistService.createArtist(artistForm);
-			Music music = Music.createMusic(musicForm, artist);
-			return musicRepository.save(music);
+			artist = mainArtistService.createArtist(artistForm);
 		}
+		Music music = Music.createMusic(musicForm, artist);
+		return musicRepository.save(music);
+	}
+
+	@Transactional
+	public Music createWithPlaylist(MusicForm musicForm, Playlist playlist) {
+		MainArtist artist = null;
+		if (musicForm.getGroupForm() != null) {
+			artist = mainArtistService.createGroupArtist(musicForm.getGroupForm(), musicForm.getArtistFormList());
+		} else {
+			ArtistForm artistForm = musicForm.getArtistFormList().get(0);
+			artist = mainArtistService.createArtist(artistForm);
+		}
+		Music music = Music.createMusic(musicForm, artist, playlist);
+		return musicRepository.save(music);
 	}
 
 	// 새로운 그룹을 만들시 혹은 가수를 만들시는 새 팝업

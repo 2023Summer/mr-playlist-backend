@@ -95,12 +95,13 @@ public class MainArtistService {
 	 * 솔로가수 삭제
 	 */
 	@Transactional
-	public void deleteSoloArtist(Long artistId) {
-		SoloArtist soloArtist = (SoloArtist)mainArtistRepository.findById(artistId)
+	public void deleteArtist(Long artistId) {
+		MainArtist artist = mainArtistRepository.findById(artistId)
 			.orElseThrow(() -> new IllegalStateException(ArtistConstants.NOT_FOUND));
-
-		soloArtist.deleteGroup();
-		mainArtistRepository.delete(soloArtist);
+		if (artist instanceof SoloArtist soloArtist) {
+			soloArtist.deleteGroup();
+		}
+		mainArtistRepository.delete(artist);
 	}
 
 	public MainArtist findMainArtist(Long id) {

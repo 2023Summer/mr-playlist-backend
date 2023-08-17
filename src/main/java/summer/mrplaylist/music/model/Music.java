@@ -66,6 +66,19 @@ public class Music {
 		return music;
 	}
 
+	// 플레이리스트 생성시 사용 생성자
+	public static Music createMusic(MusicForm musicForm, MainArtist mainArtist, Playlist playlist) {
+		Music music = Music.builder()
+			.name(musicForm.getName())
+			.url(musicForm.getUrl())
+			.playlist(playlist)
+			.description(musicForm.getDescription())
+			.build();
+		music.addArtist(mainArtist);
+		playlist.getMusicList().add(music);
+		return music;
+	}
+
 	private void addArtist(MainArtist mainArtist) {
 		this.artist = mainArtist;
 		mainArtist.addMusic(this);

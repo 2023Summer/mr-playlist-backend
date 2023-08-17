@@ -1,7 +1,12 @@
 package summer.mrplaylist.search.service;
 
+import java.util.List;
+import java.util.Set;
+
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +32,7 @@ public class SearchService {
 
 	public Page<?> search(SearchCond cond, Pageable pageable) {
 
-		redisService.saveAndIncrement(RedisConstants.SEARCH, cond.getWord());
+		redisService.getZset().incrementScore(RedisConstants.SEARCH, cond.getWord(), 1);
 
 		var resultList = switch (cond.getTopic()) {
 			case MUSIC -> musicQRepo.findNameAndArtist(cond, pageable);
@@ -37,6 +42,18 @@ public class SearchService {
 		};
 
 		return resultList;
+	}
+
+	public Page findTopWords(Pageable pageable) {
+		ZSetOperations<String, String> zSet =
+			redisService.getZset();
+
+		Set<ZSetOperations.TypedTuple<String>> searchWord = zSet.reverseRangeWithScores(RedisConstants.SEARCH,
+			pageable.getOffset(),
+			pageable.getPageSize());
+
+		List<String> findTopWords = searchWord.stream().map(word -> word.getValue()).toList();
+		return new PageImpl(findTopWords, pageable, findTopWords.size());
 	}
 
 }

@@ -28,11 +28,11 @@ public class PlaylistService {
 	private final PlaylistCategoryService plcService;
 
 	@Transactional
-	public Playlist create(PlaylistForm playlistForm, List<MusicForm> musicFormList) {
+	public Playlist create(PlaylistForm playlistForm) {
 		Playlist playlist = Playlist.createPlaylist(playlistForm);
 		Playlist savedPlayList = plRepository.save(playlist);
 		plcService.join(savedPlayList, playlistForm.getCategoryNameList());
-		return addMusic(savedPlayList.getId(), musicFormList);
+		return addMusic(savedPlayList.getId(), playlistForm.getMusicFormList());
 	}
 
 	@Transactional
@@ -54,7 +54,7 @@ public class PlaylistService {
 	@Transactional
 	public Playlist addMusic(Long playlistId, List<MusicForm> musicFormList) {
 		Playlist playlist = findPlaylist(playlistId);
-		musicFormList.stream().map(musicService::create).forEach(music -> music.addPlaylist(playlist));
+		musicFormList.stream().forEach(musicForm -> musicService.createWithPlaylist(musicForm, playlist));
 		return playlist;
 	}
 

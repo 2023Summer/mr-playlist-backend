@@ -79,10 +79,14 @@ public class Playlist {
 			.name(playlistForm.getPlName())
 			.description(playlistForm.getPlDescription())
 			.views(0)
-			.musicCount(0)
+			.musicCount(playlistForm.getMusicFormList().size())
 			.commentCount(0)
 			.member(playlistForm.getMember())
 			.build();
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public void addMusic(Music music) {
