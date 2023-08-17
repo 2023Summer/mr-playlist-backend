@@ -79,15 +79,8 @@ public class PlaylistService {
 		return new PlaylistResponse(playlist, musicList);
 	}
 
-	public List<PlaylistSimpleResponse> findPlaylistOrderByComment(Pageable pageable) {
-		List<Playlist> playlists = playlistQRepo.orderByComment(pageable);
-		List<PlaylistSimpleResponse> playlistSimpleResponses =
-			getPlaylistSimpleResponses(playlists);
-		return playlistSimpleResponses;
-	}
-
-	public List<PlaylistSimpleResponse> findPlaylistOrderByDate(Pageable pageable) {
-		List<Playlist> playlists = playlistQRepo.orderByDate(pageable);
+	public List<PlaylistSimpleResponse> findPlaylistOrderByCond(String cond, Pageable pageable) {
+		List<Playlist> playlists = playlistQRepo.orderByCond(cond, pageable);
 		List<PlaylistSimpleResponse> playlistSimpleResponses = getPlaylistSimpleResponses(playlists);
 		return playlistSimpleResponses;
 

@@ -1,5 +1,6 @@
 package summer.mrplaylist.playlist.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import summer.mrplaylist.playlist.model.Playlist;
 
@@ -8,6 +9,7 @@ import summer.mrplaylist.playlist.model.Playlist;
  * 간단한 정보만 들어있는 반환 Dto
  */
 @Getter
+@AllArgsConstructor
 public class PlaylistSimpleResponse {
 	private Long id;
 	private String name;

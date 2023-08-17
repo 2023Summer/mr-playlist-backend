@@ -7,18 +7,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static summer.mrplaylist.CreateMethod.*;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import summer.mrplaylist.member.model.Member;
 import summer.mrplaylist.playlist.dto.PlaylistForm;
+import summer.mrplaylist.playlist.dto.PlaylistSimpleResponse;
 import summer.mrplaylist.playlist.model.Playlist;
 import summer.mrplaylist.playlist.service.PlaylistService;
 
@@ -82,11 +86,32 @@ class PlaylistControllerTest {
 				.with(csrf())
 			).andExpect(status().isOk())
 			.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-			.andExpect(jsonPath("$.data[0].message").value("성공적으로 저장했습니다."))
-			.andExpect(jsonPath("$.data[0].id").value(1));
+			.andExpect(jsonPath("$.data.message").value("성공적으로 저장했습니다."))
+			.andExpect(jsonPath("$.data.id").value(1));
 
-		//then
+	}
 
+	@DisplayName("[API][GET] 조건별 플레이리스트 검색")
+	@WithMockUser
+	@Test
+	public void testGetOrderInfo() throws Exception {
+		List<PlaylistSimpleResponse> arrayList = new ArrayList<>();
+		arrayList.add(new PlaylistSimpleResponse(1L, "가정교사히트맨리본", "2021-01-01", 3));
+		arrayList.add(new PlaylistSimpleResponse(2L, "은혼", "2021-01-06", 5));
+
+		PageRequest page = PageRequest.of(0, 10);
+		//given
+		given(playlistService.findPlaylistOrderByCond("comment", page))
+			.willReturn(
+				arrayList
+			);
+		//when
+		mockmvc.perform(get("/api/playlist/comment/order?size=10&page=0")
+			).andExpect(status().isOk())
+			.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+			.andExpect(jsonPath("$.data[0].id").value(1L))
+			.andExpect(jsonPath("$.data[0].name").value("가정교사히트맨리본"))
+			.andExpect(jsonPath("$.data[1].name").value("은혼"));
 	}
 
 }
