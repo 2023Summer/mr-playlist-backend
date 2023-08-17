@@ -20,7 +20,7 @@ import summer.mrplaylist.music.repository.MainArtistRepository;
 class MainSoloArtistServiceTest {
 
 	@InjectMocks
-	private ArtistService artistService;
+	private MainArtistService artistService;
 
 	@Mock
 	private MainArtistRepository mainArtistRepository;

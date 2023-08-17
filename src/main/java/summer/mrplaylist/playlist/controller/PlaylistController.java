@@ -26,9 +26,9 @@ public class PlaylistController {
 
 	private final PlaylistService playlistService;
 
-	private static final String POST_REGISTER_PLAYLIST = "playlist/register";
-	private static final String POST_UPDATE_PLAYLIST = "playlist/update";
-	private static final String DELETE_PLAYLIST = "playlist/delete";
+	private static final String POST_REGISTER_PLAYLIST = "/playlist/register";
+	private static final String POST_UPDATE_PLAYLIST = "/playlist/update";
+	private static final String DELETE_PLAYLIST = "/playlist/delete";
 
 	@PostMapping(POST_REGISTER_PLAYLIST)
 	public Response registerPlaylist(@RequestBody PlaylistForm playlistForm) {

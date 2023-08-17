@@ -32,17 +32,16 @@ import summer.mrplaylist.music.service.MainArtistService;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("api/")
+@RequestMapping("/api")
 public class ArtistController {
 
 	private final MainArtistService artistService;
 
-	private static final String POST_JOIN_ARTIST = "artist/register";
-	private static final String POST_JOIN_GROUP_ARTIST = "artist/group/register";
-	private static final String POST_UPDATE_ARTIST = "artist/update";
-	private static final String GET_ARTIST_INFO = "artist/{artistId}";
-
-	private static final String DELETE_ARTIST = "artist/delete";
+	private static final String POST_JOIN_ARTIST = "/artist/register";
+	private static final String POST_JOIN_GROUP_ARTIST = "/artist/group/register";
+	private static final String POST_UPDATE_ARTIST = "/artist/update";
+	private static final String GET_ARTIST_INFO = "/artist/{artistId}";
+	private static final String DELETE_ARTIST = "/artist/delete";
 
 	@PostMapping(POST_JOIN_ARTIST)
 	public Response joinArtist(@RequestBody ArtistForm artistForm) {

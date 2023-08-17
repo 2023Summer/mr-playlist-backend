@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import summer.mrplaylist.common.dto.PageResponse;
 import summer.mrplaylist.common.dto.Response;
 import summer.mrplaylist.search.service.SearchService;
 
@@ -24,7 +23,7 @@ public class SearchController {
 
 	@GetMapping(GET_SEARCH_WORD)
 	public Response getSearchWord(@PageableDefault(size = 6) Pageable pageable) {
-		return new PageResponse(searchService.findTopWords(pageable));
+		return new Response(searchService.findTopWords(pageable));
 	}
 
 }

@@ -25,9 +25,9 @@ import summer.mrplaylist.music.service.MusicService;
 public class MusicController {
 
 	private final MusicService musicService;
-	private static final String POST_REGISTER_MUSIC = "music/register";
-	private static final String POST_UPDATE_MUSIC = "music/update";
-	private static final String DELETE_MUSIC = "music/update";
+	private static final String POST_REGISTER_MUSIC = "/music/register";
+	private static final String POST_UPDATE_MUSIC = "/music/update";
+	private static final String DELETE_MUSIC = "/music/update";
 
 	@PostMapping(POST_REGISTER_MUSIC)
 	public Response registerMusic(@RequestBody MusicForm musicForm) {

@@ -22,7 +22,7 @@ import summer.mrplaylist.music.model.Group;
 public class MainSoloArtistServiceBootTest {
 
 	@Autowired
-	private ArtistService artistService;
+	private MainArtistService artistService;
 
 	@Test
 	public void createGroupArtist() throws Exception {

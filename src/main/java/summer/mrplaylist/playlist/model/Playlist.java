@@ -85,6 +85,10 @@ public class Playlist {
 			.build();
 	}
 
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public void addMusic(Music music) {
 		this.musicList.add(music);
 		this.musicCount += 1;
