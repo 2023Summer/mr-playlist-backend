@@ -18,6 +18,7 @@ import summer.mrplaylist.music.model.QMusic;
 import summer.mrplaylist.playlist.model.Playlist;
 import summer.mrplaylist.playlist.model.QPlaylist;
 import summer.mrplaylist.search.dto.SearchCond;
+import summer.mrplaylist.search.dto.SearchResponse;
 
 @Slf4j
 @Repository
@@ -29,7 +30,7 @@ public class MusicQRepo {
 	QMainArtist qMainArtist = QMainArtist.mainArtist;
 	QPlaylist qPlaylist = QPlaylist.playlist;
 
-	public Page<Music> findNameAndArtist(SearchCond cond, Pageable pageable) {
+	public Page<SearchResponse> findNameAndArtist(SearchCond cond, Pageable pageable) {
 		List<Music> findMusic = queryFactory.selectFrom(qMusic)
 			.join(qMusic.artist, qMainArtist).fetchJoin()
 			.where(containName(cond.getWord())
@@ -38,7 +39,11 @@ public class MusicQRepo {
 			.limit(pageable.getPageSize())
 			.orderBy()
 			.fetch();
-		return new PageImpl<>(findMusic, pageable, findMusic.size());
+
+		List<SearchResponse> searchResponses = findMusic.stream().map(
+			music -> new SearchResponse(music.getId(), music.getName(), music.getDescription())
+		).toList();
+		return new PageImpl<>(searchResponses, pageable, searchResponses.size());
 	}
 
 	public List<Music> findMusicWithArtist(Playlist playlist) {

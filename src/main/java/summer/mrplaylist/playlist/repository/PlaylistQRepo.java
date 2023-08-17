@@ -2,6 +2,7 @@ package summer.mrplaylist.playlist.repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.data.domain.Page;
@@ -18,8 +19,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import summer.mrplaylist.member.model.QMember;
 import summer.mrplaylist.playlist.model.Playlist;
+import summer.mrplaylist.playlist.model.QCategory;
 import summer.mrplaylist.playlist.model.QPlaylist;
+import summer.mrplaylist.playlist.model.QPlaylistCategory;
 import summer.mrplaylist.search.dto.SearchCond;
+import summer.mrplaylist.search.dto.SearchResponse;
 
 @Slf4j
 @Repository
@@ -30,13 +34,15 @@ public class PlaylistQRepo {
 
 	QPlaylist qPlaylist = QPlaylist.playlist;
 	QMember qMember = QMember.member;
+	QPlaylistCategory qPlaylistCategory = QPlaylistCategory.playlistCategory;
+	QCategory qCategory = QCategory.category;
 
 	/**
 	 * 키워드 검색
 	 * 우선적으로 이름을 검색한뒤
 	 * 남은건 설명에서 검색한다.
 	 */
-	public Page<Playlist> findNameDescription(SearchCond cond, Pageable pageable) {
+	public Page<SearchResponse> findNameDescription(SearchCond cond, Pageable pageable) {
 		List<Playlist> result = findByName(cond, pageable);
 		int length = result.size();
 
@@ -48,7 +54,27 @@ public class PlaylistQRepo {
 				.toList();
 		}
 
-		return new PageImpl<>(result, pageable, result.size());
+		List<SearchResponse> responses = result.stream()
+			.map(r -> new SearchResponse(r.getId(), r.getName(), r.getDescription()))
+			.collect(Collectors.toList());
+
+		return new PageImpl<>(responses, pageable, responses.size());
+	}
+
+	public Page<SearchResponse> findHavingCategory(SearchCond cond, Pageable pageable) {
+		List<Playlist> result = queryFactory.select(qPlaylistCategory.playlist)
+			.from(qPlaylistCategory)
+			.leftJoin(qPlaylistCategory.playlist, qPlaylist)
+			.leftJoin(qPlaylistCategory.category, qCategory)
+			.where(qCategory.name.eq(cond.getWord()))
+			.offset(pageable.getOffset())
+			.limit(pageable.getPageSize())
+			.fetch();
+
+		List<SearchResponse> responses = result.stream()
+			.map(r -> new SearchResponse(r.getId(), r.getName(), r.getDescription()))
+			.collect(Collectors.toList());
+		return new PageImpl<>(responses, pageable, responses.size());
 	}
 
 	public List<Playlist> findByName(SearchCond cond, Pageable pageable) {

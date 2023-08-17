@@ -18,6 +18,7 @@ import summer.mrplaylist.music.repository.MainArtistQRepo;
 import summer.mrplaylist.music.repository.MusicQRepo;
 import summer.mrplaylist.playlist.repository.PlaylistQRepo;
 import summer.mrplaylist.search.dto.SearchCond;
+import summer.mrplaylist.search.dto.SearchResponse;
 
 @Service
 @Slf4j
@@ -30,14 +31,15 @@ public class SearchService {
 	private final MainArtistQRepo mainArtistQRepo;
 	private final RedisService redisService;
 
-	public Page<?> search(SearchCond cond, Pageable pageable) {
+	public Page<SearchResponse> search(SearchCond cond, Pageable pageable) {
 
 		redisService.getZset().incrementScore(RedisConstants.SEARCH, cond.getWord(), 1);
 
-		var resultList = switch (cond.getTopic()) {
+		Page<SearchResponse> resultList = switch (cond.getTopic()) {
 			case MUSIC -> musicQRepo.findNameAndArtist(cond, pageable);
 			case ARTIST -> mainArtistQRepo.findArtist(cond, pageable);
 			case PLAYLIST -> playlistQRepo.findNameDescription(cond, pageable);
+			case CATEGORY -> playlistQRepo.findHavingCategory(cond, pageable);
 			default -> throw new IllegalStateException("검색 조건이 잘못되었습니다.");
 		};
 

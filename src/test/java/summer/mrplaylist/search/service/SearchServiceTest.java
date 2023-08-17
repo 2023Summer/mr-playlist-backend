@@ -47,6 +47,20 @@ class SearchServiceTest {
 		assertThat(resultList.getContent()).isNotNull();
 	}
 
+	@DisplayName("검색 기능 <Category> 테스트")
+	@Test
+	public void testSearch() throws Exception {
+		//given
+		SearchCond searchCond = new SearchCond("몽환", Topic.CATEGORY);
+		PageRequest pageRequest = PageRequest.of(0, 2);
+		//when
+		Page<?> resultList = searchService.search(searchCond, pageRequest);
+		//then
+		log.info("Search result = {}", resultList.getContent());
+
+		assertThat(resultList.getContent()).isNotNull();
+	}
+
 	// @PostConstruct
 	// public void initRedis() {
 	// 	redisTemplate.delete(RedisConstants.SEARCH);
