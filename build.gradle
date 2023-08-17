@@ -92,7 +92,7 @@ dependencies {
 
     //spring security 테스트 의존성 추가
     implementation "org.springframework.security:spring-security-test"
-    
+
     // OAuth 의존성 추가
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 }

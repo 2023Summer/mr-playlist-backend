@@ -15,6 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 import summer.mrplaylist.music.model.Music;
 import summer.mrplaylist.music.model.QMainArtist;
 import summer.mrplaylist.music.model.QMusic;
+import summer.mrplaylist.playlist.model.Playlist;
+import summer.mrplaylist.playlist.model.QPlaylist;
 import summer.mrplaylist.search.dto.SearchCond;
 
 @Slf4j
@@ -23,9 +25,9 @@ import summer.mrplaylist.search.dto.SearchCond;
 public class MusicQRepo {
 
 	private final JPAQueryFactory queryFactory;
-
 	QMusic qMusic = QMusic.music;
 	QMainArtist qMainArtist = QMainArtist.mainArtist;
+	QPlaylist qPlaylist = QPlaylist.playlist;
 
 	public Page<Music> findNameAndArtist(SearchCond cond, Pageable pageable) {
 		List<Music> findMusic = queryFactory.selectFrom(qMusic)
@@ -36,8 +38,17 @@ public class MusicQRepo {
 			.limit(pageable.getPageSize())
 			.orderBy()
 			.fetch();
-
 		return new PageImpl<>(findMusic, pageable, findMusic.size());
+	}
+
+	public List<Music> findMusicWithArtist(Playlist playlist) {
+		List<Music> result = queryFactory.selectFrom(qMusic)
+			.leftJoin(qMusic.playlist, qPlaylist).fetchJoin()
+			.leftJoin(qMusic.artist, qMainArtist).fetchJoin()
+			.where(qMusic.playlist.eq(playlist))
+			.fetch();
+		return result;
+
 	}
 
 	private BooleanExpression likeArtist(String word) {

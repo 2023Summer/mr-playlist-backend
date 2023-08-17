@@ -1,6 +1,9 @@
 spring:
   profiles:
-    active: test
+    active: local,init
+    group:
+      local:
+        - oauth
 
   datasource:
     url: jdbc:postgresql://0.0.0.0:5432/playlist
