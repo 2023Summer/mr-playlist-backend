@@ -12,6 +12,7 @@ import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,11 +26,10 @@ import summer.mrplaylist.music.dto.MusicForm;
 import summer.mrplaylist.playlist.dto.PlaylistForm;
 import summer.mrplaylist.playlist.service.PlaylistService;
 
-// @Profile({"test", "init"})
+@Profile({"test", "init"})
 @Component
 @RequiredArgsConstructor
 @Slf4j
-// @ConditionalOnResource(resources = "PlaylistData.xlsx")
 public class XlsxFileParser {
 
 	private final PlaylistService playlistService;
