@@ -73,5 +73,7 @@ public class PlaylistServiceTest {
 		assertThat(playlistInfo.getDescription()).isEqualTo(playlist.getDescription());
 		assertThat(playlistInfo.getMemberId()).isEqualTo(member.getId());
 
+		log.info("Playlist Info= {}", playlistInfo);
+
 	}
 }

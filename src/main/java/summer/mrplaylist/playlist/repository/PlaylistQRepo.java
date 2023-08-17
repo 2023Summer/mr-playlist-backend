@@ -69,22 +69,20 @@ public class PlaylistQRepo {
 			.fetch();
 	}
 
-	public List<Playlist> orderByComment(Pageable pageable) {
+	public List<Playlist> orderByCond(String cond, Pageable pageable) {
 		return queryFactory.selectFrom(qPlaylist)
 			.leftJoin(qPlaylist.member, qMember).fetchJoin()
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
-			.orderBy(qPlaylist.commentCount.desc(), orderDate())
+			.orderBy(orderComment(cond), orderDate())
 			.fetch();
 	}
 
-	public List<Playlist> orderByDate(Pageable pageable) {
-		return queryFactory.selectFrom(qPlaylist)
-			.leftJoin(qPlaylist.member, qMember).fetchJoin()
-			.offset(pageable.getOffset())
-			.limit(pageable.getPageSize())
-			.orderBy(orderDate())
-			.fetch();
+	private OrderSpecifier<Integer> orderComment(String cond) {
+		if (cond.equals("comment"))
+			return qPlaylist.commentCount.desc();
+		else
+			return null;
 	}
 
 	private OrderSpecifier<LocalDateTime> orderDate() {
@@ -95,7 +93,4 @@ public class PlaylistQRepo {
 		return qPlaylist.name.contains(word);
 	}
 
-	private BooleanExpression containDescription(String word) {
-		return qPlaylist.description.contains(word);
-	}
 }
