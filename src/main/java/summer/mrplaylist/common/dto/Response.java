@@ -8,8 +8,9 @@ import lombok.Data;
 public class Response<T> {
 
 	private LocalDateTime date;
-	private T data;
 
+	private T data;
+  
 	public Response(T data) {
 		this.date = LocalDateTime.now();
 		this.data = data;
