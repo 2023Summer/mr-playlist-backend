@@ -35,9 +35,14 @@ public class MemberService {
 	}
 
 	public Member update(Long id, UpdateMemberRequestDto requestDto) {
-		Member member = memberRepository.findById(id)
-			.orElseThrow(() -> new IllegalArgumentException(MemberConstants.NOT_EXISTS_MEMBER));
+		Member member = findMember(id);
 		member.updateMember(requestDto);
+		return member;
+	}
+
+	public Member findMember(Long memberId) {
+		Member member = memberRepository.findById(memberId)
+			.orElseThrow(() -> new IllegalArgumentException(MemberConstants.NOT_EXISTS_MEMBER));
 		return member;
 	}
 }

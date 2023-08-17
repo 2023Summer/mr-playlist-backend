@@ -8,6 +8,8 @@ import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
+import org.springframework.data.redis.serializer.GenericToStringSerializer;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +39,17 @@ public class RedisConfig {
 		redisTemplate.setConnectionFactory(redisConnectionFactory());
 		redisTemplate.setKeySerializer(new StringRedisSerializer());
 		redisTemplate.setValueSerializer(new StringRedisSerializer());
+		return redisTemplate;
+	}
+
+	@Bean
+	public RedisTemplate<String, Long> redisStringLongTemplate() {
+		RedisTemplate<String, Long> redisTemplate = new RedisTemplate<>();
+		redisTemplate.setConnectionFactory(redisConnectionFactory());
+		redisTemplate.setKeySerializer(new GenericToStringSerializer<>(Object.class));
+		redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(Long.class));
+		redisTemplate.setHashKeySerializer(new GenericToStringSerializer<>(Object.class));
+		redisTemplate.setHashValueSerializer(new Jackson2JsonRedisSerializer<>(Long.class));
 		return redisTemplate;
 	}
 }

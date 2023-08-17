@@ -20,16 +20,16 @@ import summer.mrplaylist.playlist.service.PlaylistService;
 
 @SpringBootTest
 @Slf4j
-class LikeServiceTest {
+class LikesServiceTest {
 
 	@Autowired
-	LikeService likeService;
+	LikesService likesService;
 
 	@Autowired
 	PlaylistService playlistService;
 
 	@Autowired
-	LikeRedisService likeRedisService;
+	LikesRedisService likesRedisService;
 
 	@Autowired
 	MemberRepository memberRepository;
@@ -45,10 +45,10 @@ class LikeServiceTest {
 		Playlist playlist = playlistService.create(playlistForm, musicFormList);
 
 		// when
-		likeService.playlistAddLike(playlist.getId(), member.getId());
-		Set<Object> likes = likeRedisService.getAllData("likes:playlist:" + playlist.getId().toString());
+		likesService.playlistAddLike(playlist.getId(), member.getId());
+		Set<Long> likes = likesRedisService.getAllData("likes:playlist:" + playlist.getId().toString());
 		// then
-		Assertions.assertThat(member.getId().toString()).isIn(likes);
+		Assertions.assertThat(member.getId()).isIn(likes);
 		Assertions.assertThat(1).isEqualTo(likes.size());
 
 	}
@@ -64,11 +64,24 @@ class LikeServiceTest {
 		Playlist playlist = playlistService.create(playlistForm, musicFormList);
 
 		// when
-		likeService.playlistAddLike(playlist.getId(), member.getId());
-		likeService.playlistDeleteLike(playlist.getId(), member.getId());
-		Set<Object> likes = likeRedisService.getAllData("likes:playlist:" + playlist.getId().toString());
+		likesService.playlistAddLike(playlist.getId(), member.getId());
+		likesService.playlistDeleteLike(playlist.getId(), member.getId());
+		Set<Long> likes = likesRedisService.getAllData("likes:playlist:" + playlist.getId().toString());
 		// then
 		Assertions.assertThat(member.getId().toString()).isNotIn(likes);
 		Assertions.assertThat(0).isEqualTo(likes.size());
+	}
+
+	@Test
+	void 좋아요_여러명_테스트() {
+		// given
+		Long playlistId = 1L;
+		// when
+		for (int memberId = 0; memberId < 10; memberId++) {
+			likesService.playlistAddLike(playlistId, Long.valueOf(memberId));
+		}
+		Set<Long> likes = likesRedisService.getAllData("likes:playlist:" + playlistId);
+		// then
+		Assertions.assertThat(10).isEqualTo(likes.size());
 	}
 }
