@@ -4,6 +4,7 @@ import static summer.mrplaylist.playlist.constant.PlaylistConstant.*;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,10 +12,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import summer.mrplaylist.music.dto.MusicForm;
 import summer.mrplaylist.music.model.Music;
+import summer.mrplaylist.music.repository.MusicQRepo;
 import summer.mrplaylist.music.service.MusicService;
 import summer.mrplaylist.playlist.dto.PlaylistForm;
+import summer.mrplaylist.playlist.dto.PlaylistResponse;
+import summer.mrplaylist.playlist.dto.PlaylistSimpleResponse;
 import summer.mrplaylist.playlist.dto.PlaylistUpdateForm;
 import summer.mrplaylist.playlist.model.Playlist;
+import summer.mrplaylist.playlist.repository.PlaylistQRepo;
 import summer.mrplaylist.playlist.repository.PlaylistRepository;
 
 @Slf4j
@@ -25,6 +30,8 @@ public class PlaylistService {
 
 	private final MusicService musicService;
 	private final PlaylistRepository plRepository;
+	private final PlaylistQRepo playlistQRepo;
+	private final MusicQRepo musicQRepo;
 	private final PlaylistCategoryService plcService;
 
 	@Transactional
@@ -41,9 +48,6 @@ public class PlaylistService {
 		playlist.updateInfo(updateForm);
 		return playlist;
 	}
-
-	// 음악 삭제 연산만 있으면
-	// 1:N 이라 충분함
 
 	@Transactional
 	public void delete(Long playListId) {
@@ -69,9 +73,35 @@ public class PlaylistService {
 		}
 	}
 
+	public PlaylistResponse findPlaylistInfo(Long playlistId) {
+		Playlist playlist = findPlaylist(playlistId);
+		List<Music> musicList = musicQRepo.findMusicWithArtist(playlist);
+		return new PlaylistResponse(playlist, musicList);
+	}
+
+	public List<PlaylistSimpleResponse> findPlaylistOrderByComment(Pageable pageable) {
+		List<Playlist> playlists = playlistQRepo.orderByComment(pageable);
+		List<PlaylistSimpleResponse> playlistSimpleResponses =
+			getPlaylistSimpleResponses(playlists);
+		return playlistSimpleResponses;
+	}
+
+	public List<PlaylistSimpleResponse> findPlaylistOrderByDate(Pageable pageable) {
+		List<Playlist> playlists = playlistQRepo.orderByDate(pageable);
+		List<PlaylistSimpleResponse> playlistSimpleResponses = getPlaylistSimpleResponses(playlists);
+		return playlistSimpleResponses;
+
+	}
+
+	private static List<PlaylistSimpleResponse> getPlaylistSimpleResponses(List<Playlist> playlists) {
+		List<PlaylistSimpleResponse> playlistSimpleResponses = playlists.stream()
+			.map(PlaylistSimpleResponse::new)
+			.toList();
+		return playlistSimpleResponses;
+	}
+
 	public Playlist findPlaylist(Long playlistId) {
 		return plRepository.findById(playlistId)
 			.orElseThrow(() -> new IllegalArgumentException(NOT_FOUND_PLAYLIST));
 	}
-
 }

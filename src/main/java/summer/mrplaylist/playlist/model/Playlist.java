@@ -41,19 +41,20 @@ public class Playlist {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "playlist_id")
 	private Long id;
+	@Column(name = "name", length = 100, nullable = false)
+	private String name;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "member_id")
 	private Member member;
+	@Column(name = "description")
+	private String description;
 
 	@Column(name = "music_count", nullable = false)
 	private Integer musicCount;
 
 	@Column(name = "comment_count", nullable = false)
 	private Integer commentCount;
-
-	@Column(name = "name", length = 100, nullable = false)
-	private String name;
 
 	@Column(name = "views", nullable = false)
 	@ColumnDefault("0")
@@ -62,9 +63,6 @@ public class Playlist {
 	@CreatedDate
 	@Column(name = "created_at")
 	private LocalDateTime createdAt;
-
-	@Column(name = "description")
-	private String description;
 
 	@Builder.Default
 	@OneToMany(mappedBy = "playlist", cascade = CascadeType.PERSIST)

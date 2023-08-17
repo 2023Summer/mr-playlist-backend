@@ -1,5 +1,6 @@
 package summer.mrplaylist.playlist.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -9,11 +10,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import summer.mrplaylist.member.model.QMember;
 import summer.mrplaylist.playlist.model.Playlist;
 import summer.mrplaylist.playlist.model.QPlaylist;
 import summer.mrplaylist.search.dto.SearchCond;
@@ -26,6 +29,7 @@ public class PlaylistQRepo {
 	private final JPAQueryFactory queryFactory;
 
 	QPlaylist qPlaylist = QPlaylist.playlist;
+	QMember qMember = QMember.member;
 
 	/**
 	 * 키워드 검색
@@ -49,6 +53,7 @@ public class PlaylistQRepo {
 
 	public List<Playlist> findByName(SearchCond cond, Pageable pageable) {
 		return queryFactory.selectFrom(qPlaylist)
+			.leftJoin(qPlaylist.member, qMember).fetchJoin()
 			.where(containName(cond.getWord()))
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
@@ -57,10 +62,33 @@ public class PlaylistQRepo {
 
 	public List<Playlist> findByDescription(SearchCond cond, Pageable pageable, List<Playlist> findList) {
 		return queryFactory.selectFrom(qPlaylist)
+			.leftJoin(qPlaylist.member, qMember).fetchJoin()
 			.where(containName(cond.getWord()),
 				qPlaylist.notIn(findList))
 			.limit(pageable.getPageSize())
 			.fetch();
+	}
+
+	public List<Playlist> orderByComment(Pageable pageable) {
+		return queryFactory.selectFrom(qPlaylist)
+			.leftJoin(qPlaylist.member, qMember).fetchJoin()
+			.offset(pageable.getOffset())
+			.limit(pageable.getPageSize())
+			.orderBy(qPlaylist.commentCount.desc(), orderDate())
+			.fetch();
+	}
+
+	public List<Playlist> orderByDate(Pageable pageable) {
+		return queryFactory.selectFrom(qPlaylist)
+			.leftJoin(qPlaylist.member, qMember).fetchJoin()
+			.offset(pageable.getOffset())
+			.limit(pageable.getPageSize())
+			.orderBy(orderDate())
+			.fetch();
+	}
+
+	private OrderSpecifier<LocalDateTime> orderDate() {
+		return qPlaylist.createdAt.desc();
 	}
 
 	private BooleanExpression containName(String word) {
