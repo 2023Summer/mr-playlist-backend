@@ -40,6 +40,8 @@ public class PlaylistController {
 	private static final String GET_PLAYLIST_INFO = "/playlist/{playlistId}";
 	private static final String GET_PLAYLIST_ORDER_BY_COND = "/playlist/{cond}/order";
 
+	private static final String GET_PLAYLIST_BY_CATEGORY = "/playlist/find-category";
+
 	@PostMapping(POST_REGISTER_PLAYLIST)
 	public Response registerPlaylist(@RequestBody PlaylistForm playlistForm) {
 		Playlist playlist = playlistService.create(playlistForm);
@@ -69,6 +71,13 @@ public class PlaylistController {
 		@PageableDefault(size = 5, page = 0) Pageable pageable) {
 		List<PlaylistSimpleResponse> playlistResponse = playlistService.findPlaylistOrderByCond(cond, pageable);
 		return new Response(playlistResponse);
+	}
+
+	@GetMapping(GET_PLAYLIST_BY_CATEGORY)
+	public Response getPlaylistByCategory(@RequestParam String categoryName,
+		@PageableDefault(size = 5, page = 0) Pageable pageable) {
+		List<PlaylistSimpleResponse> playlistByCategory = playlistService.getPlaylistByCategory(categoryName, pageable);
+		return new Response(playlistByCategory);
 	}
 
 	@Data

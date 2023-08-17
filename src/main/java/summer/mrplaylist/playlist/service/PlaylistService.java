@@ -4,6 +4,7 @@ import static summer.mrplaylist.playlist.constant.PlaylistConstant.*;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -86,6 +87,16 @@ public class PlaylistService {
 
 	}
 
+	public Playlist findPlaylist(Long playlistId) {
+		return plRepository.findById(playlistId)
+			.orElseThrow(() -> new IllegalArgumentException(NOT_FOUND_PLAYLIST));
+	}
+
+	public List<PlaylistSimpleResponse> getPlaylistByCategory(String categoryName, Pageable pageable) {
+		Page<Playlist> playlists = playlistQRepo.findHavingCategory(categoryName, pageable);
+		return getPlaylistSimpleResponses(playlists.getContent());
+	}
+
 	private static List<PlaylistSimpleResponse> getPlaylistSimpleResponses(List<Playlist> playlists) {
 		List<PlaylistSimpleResponse> playlistSimpleResponses = playlists.stream()
 			.map(PlaylistSimpleResponse::new)
@@ -93,8 +104,4 @@ public class PlaylistService {
 		return playlistSimpleResponses;
 	}
 
-	public Playlist findPlaylist(Long playlistId) {
-		return plRepository.findById(playlistId)
-			.orElseThrow(() -> new IllegalArgumentException(NOT_FOUND_PLAYLIST));
-	}
 }
