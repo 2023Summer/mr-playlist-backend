@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import summer.mrplaylist.likes.dto.LikesForm;
 import summer.mrplaylist.likes.model.Likes;
 import summer.mrplaylist.likes.repository.LikesRepository;
 import summer.mrplaylist.member.model.Member;
@@ -37,7 +38,7 @@ class LikesSchedulerTest {
 	LikesRedisService likesRedisService;
 
 	@Test
-	void updatePlaylistLikes() {
+	void updatePlaylistLikes() throws Exception {
 		// given
 		Member member = getMember();
 		member = memberRepository.save(member);
@@ -47,7 +48,7 @@ class LikesSchedulerTest {
 		Playlist playlist = playlistService.create(playlistForm, musicFormList);
 
 		// when
-		likesService.playlistAddLike(playlist.getId(), member.getId());
+		likesService.playlistAddLike(new LikesForm(playlist.getId(), member.getId()));
 		Set<Long> likes = likesRedisService.getAllData("likes:playlist:" + playlist.getId().toString());
 
 		likesScheduler.updatePlaylistLikes();

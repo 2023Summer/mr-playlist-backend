@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import lombok.extern.slf4j.Slf4j;
+import summer.mrplaylist.likes.dto.LikesForm;
 import summer.mrplaylist.member.model.Member;
 import summer.mrplaylist.member.repository.MemberRepository;
 import summer.mrplaylist.music.dto.MusicForm;
@@ -45,7 +46,7 @@ class LikesServiceTest {
 		Playlist playlist = playlistService.create(playlistForm, musicFormList);
 
 		// when
-		likesService.playlistAddLike(playlist.getId(), member.getId());
+		likesService.playlistAddLike(new LikesForm(playlist.getId(), member.getId()));
 		Set<Long> likes = likesRedisService.getAllData("likes:playlist:" + playlist.getId().toString());
 		// then
 		Assertions.assertThat(member.getId()).isIn(likes);
@@ -64,7 +65,7 @@ class LikesServiceTest {
 		Playlist playlist = playlistService.create(playlistForm, musicFormList);
 
 		// when
-		likesService.playlistAddLike(playlist.getId(), member.getId());
+		likesService.playlistAddLike(new LikesForm(playlist.getId(), member.getId()));
 		likesService.playlistDeleteLike(playlist.getId(), member.getId());
 		Set<Long> likes = likesRedisService.getAllData("likes:playlist:" + playlist.getId().toString());
 		// then
@@ -78,7 +79,7 @@ class LikesServiceTest {
 		Long playlistId = 1L;
 		// when
 		for (int memberId = 0; memberId < 10; memberId++) {
-			likesService.playlistAddLike(playlistId, Long.valueOf(memberId));
+			likesService.playlistAddLike(new LikesForm(playlistId, Long.valueOf(memberId)));
 		}
 		Set<Long> likes = likesRedisService.getAllData("likes:playlist:" + playlistId);
 		// then

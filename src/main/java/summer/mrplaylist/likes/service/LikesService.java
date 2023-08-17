@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import summer.mrplaylist.likes.dto.LikesForm;
 import summer.mrplaylist.likes.model.Likes;
 import summer.mrplaylist.likes.repository.LikesRepository;
 
@@ -17,10 +18,10 @@ public class LikesService {
 	private final LikesRepository likesRepository;
 	private static final String PLAYLIST_LIKES_KEY = "likes:playlist:";
 
-	public void playlistAddLike(Long playlistId, Long memberId) {
-		String key = PLAYLIST_LIKES_KEY + playlistId.toString();
+	public void playlistAddLike(LikesForm likesForm) {
+		String key = PLAYLIST_LIKES_KEY + likesForm.getPlaylistId().toString();
 		log.info(key);
-		likesRedisService.setData(key, memberId);
+		likesRedisService.setData(key, likesForm.getMemberId());
 	}
 
 	public void playlistDeleteLike(Long playlistId, Long memberId) {

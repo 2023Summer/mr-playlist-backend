@@ -39,7 +39,7 @@ spring:
   jwt:
     secret-key: SlNPTl9XRUJfVE9LRU5fVEVTVF9TRUNSRVRfS0VZUw==
     access-token-expiration: 180000 # 30분
-    refresh-token-expiration: 1296000000 # 15일
+    refresh-token-expiration: 86400000 # 10일
 
 logging:
   level:

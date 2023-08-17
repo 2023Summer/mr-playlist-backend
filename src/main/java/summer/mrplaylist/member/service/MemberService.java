@@ -24,18 +24,18 @@ public class MemberService {
 	private final JwtTokenProvider jwtTokenProvider;
 	private final RedisService redisService;
 
-	public Long join(Member member) {
+	public Member join(Member member) {
 		if (memberRepository.existsByEmail(member.getEmail())) {
 			throw new IllegalStateException("이미 존재하는 이메일입니다."); // 이후 같은 부분 생길 시
 		}
 		member.setPassword(bCryptPasswordEncoder.encode(member.getPassword())); // 암호화
 		memberRepository.save(member);
 
-		return member.getId();
+		return member;
 	}
 
-	public Member update(Long id, UpdateMemberRequestDto requestDto) {
-		Member member = findMember(id);
+	public Member update(UpdateMemberRequestDto requestDto) {
+		Member member = findMember(requestDto.getId());
 		member.updateMember(requestDto);
 		return member;
 	}

@@ -23,8 +23,11 @@ public class LikesScheduler {
 	private final PlaylistService playlistService;
 
 	@Scheduled(fixedDelay = 600000) // 10분마다 실행
-	public void updatePlaylistLikes() {
+	public void updatePlaylistLikes() throws Exception {
 		Set<String> keys = likesRedisService.getKeys("*");
+		if (keys.isEmpty()) {
+			throw new IllegalStateException("좋아요가 존재하지 않습니다.");
+		}
 		for (String key : keys) {
 			Set<Long> memberIdSet = likesRedisService.getAllData(key);
 			for (Long memberId : memberIdSet) {
