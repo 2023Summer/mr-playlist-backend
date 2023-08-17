@@ -2,6 +2,7 @@ package summer.mrplaylist.search.service;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -16,6 +17,7 @@ import summer.mrplaylist.common.constant.RedisConstants;
 import summer.mrplaylist.common.service.RedisService;
 import summer.mrplaylist.music.repository.MainArtistQRepo;
 import summer.mrplaylist.music.repository.MusicQRepo;
+import summer.mrplaylist.playlist.model.Playlist;
 import summer.mrplaylist.playlist.repository.PlaylistQRepo;
 import summer.mrplaylist.search.dto.SearchCond;
 import summer.mrplaylist.search.dto.SearchResponse;
@@ -39,7 +41,14 @@ public class SearchService {
 			case MUSIC -> musicQRepo.findNameAndArtist(cond, pageable);
 			case ARTIST -> mainArtistQRepo.findArtist(cond, pageable);
 			case PLAYLIST -> playlistQRepo.findNameDescription(cond, pageable);
-			case CATEGORY -> playlistQRepo.findHavingCategory(cond, pageable);
+			case CATEGORY -> {
+				Page<Playlist> response = playlistQRepo.findHavingCategory(cond.getWord(), pageable);
+				List<SearchResponse> collect = response.getContent().stream()
+					.map(r -> new SearchResponse(r.getId(), r.getName(), r.getDescription()))
+					.collect(Collectors.toList());
+				yield new PageImpl<>(collect, pageable, collect.size());
+
+			}
 			default -> throw new IllegalStateException("검색 조건이 잘못되었습니다.");
 		};
 

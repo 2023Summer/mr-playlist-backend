@@ -61,20 +61,17 @@ public class PlaylistQRepo {
 		return new PageImpl<>(responses, pageable, responses.size());
 	}
 
-	public Page<SearchResponse> findHavingCategory(SearchCond cond, Pageable pageable) {
+	public Page<Playlist> findHavingCategory(String word, Pageable pageable) {
 		List<Playlist> result = queryFactory.select(qPlaylistCategory.playlist)
 			.from(qPlaylistCategory)
 			.leftJoin(qPlaylistCategory.playlist, qPlaylist)
 			.leftJoin(qPlaylistCategory.category, qCategory)
-			.where(qCategory.name.eq(cond.getWord()))
+			.where(qCategory.name.eq(word))
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
 			.fetch();
 
-		List<SearchResponse> responses = result.stream()
-			.map(r -> new SearchResponse(r.getId(), r.getName(), r.getDescription()))
-			.collect(Collectors.toList());
-		return new PageImpl<>(responses, pageable, responses.size());
+		return new PageImpl<>(result, pageable, result.size());
 	}
 
 	public List<Playlist> findByName(SearchCond cond, Pageable pageable) {
