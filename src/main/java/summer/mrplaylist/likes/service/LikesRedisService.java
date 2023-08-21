@@ -21,7 +21,15 @@ public class LikesRedisService {
 		setOperations.add(key, value);
 	}
 
-	public void deleteData(String key, Long value) {
+	public Boolean existData(String key, Long value) {
+		return setOperations.isMember(key, value);
+	}
+
+	public void renameKey(String oldKey, String newKey) {
+		redisTemplate.rename(oldKey, newKey);
+	}
+
+	public void removeData(String key, Long value) {
 		setOperations.remove(key, value);
 	}
 

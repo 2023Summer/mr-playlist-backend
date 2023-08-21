@@ -27,16 +27,16 @@ public class Likes {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "member_id")
-	private Member memberId;
+	private Member member;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "playlist_id")
-	private Playlist playlistId;
+	private Playlist playlist;
 
-	public static Likes createLikes(Member member, Playlist playlist) {
+	public static Likes createLikes(Playlist playlist, Member member) {
 		return Likes.builder()
-			.memberId(member)
-			.playlistId(playlist)
+			.member(member)
+			.playlist(playlist)
 			.build();
 	}
 }

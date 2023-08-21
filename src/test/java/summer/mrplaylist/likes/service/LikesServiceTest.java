@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import lombok.extern.slf4j.Slf4j;
+import summer.mrplaylist.likes.constant.LikesConstants;
 import summer.mrplaylist.likes.dto.LikesForm;
 import summer.mrplaylist.member.model.Member;
 import summer.mrplaylist.member.repository.MemberRepository;
@@ -47,7 +48,7 @@ class LikesServiceTest {
 
 		// when
 		likesService.playlistAddLike(new LikesForm(playlist.getId(), member.getId()));
-		Set<Long> likes = likesRedisService.getAllData("likes:playlist:" + playlist.getId().toString());
+		Set<Long> likes = likesRedisService.getAllData(LikesConstants.ADD_LIKES_PREFIX + playlist.getId().toString());
 		// then
 		Assertions.assertThat(member.getId()).isIn(likes);
 		Assertions.assertThat(1).isEqualTo(likes.size());
@@ -67,7 +68,7 @@ class LikesServiceTest {
 		// when
 		likesService.playlistAddLike(new LikesForm(playlist.getId(), member.getId()));
 		likesService.playlistDeleteLike(playlist.getId(), member.getId());
-		Set<Long> likes = likesRedisService.getAllData("likes:playlist:" + playlist.getId().toString());
+		Set<Long> likes = likesRedisService.getAllData(LikesConstants.ADD_LIKES_PREFIX + playlist.getId().toString());
 		// then
 		Assertions.assertThat(member.getId().toString()).isNotIn(likes);
 		Assertions.assertThat(0).isEqualTo(likes.size());
