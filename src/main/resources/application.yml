@@ -8,6 +8,19 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
 
+  cloud:
+    aws:
+      s3:
+        bucket: mrplaylist-forfiles
+      credentials:
+        access-key: ${AWS_ACCESS_KEY}
+        secret-key: ${AWS_SECRET_KEY}
+      region:
+        static: ap-northeast-2
+        auto: false
+      stack:
+        auto: false
+
   jpa:
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
