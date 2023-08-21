@@ -17,7 +17,7 @@ public class LikesRedisService {
 	@Resource(name = "redisStringLongTemplate")
 	private SetOperations<String, Long> setOperations;
 
-	public void setData(String key, Long value) {
+	public void addData(String key, Long value) {
 		setOperations.add(key, value);
 	}
 

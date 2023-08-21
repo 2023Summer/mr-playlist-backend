@@ -58,7 +58,7 @@ public class LikesService {
 	}
 
 	private void setLike(String prefix, Long playlistId, Long memberId) {
-		likesRedisService.setData(makeKey(prefix, playlistId), memberId);
+		likesRedisService.addData(makeKey(prefix, playlistId), memberId);
 	}
 
 	private String makeKey(String prefix, Long playlistId) {
