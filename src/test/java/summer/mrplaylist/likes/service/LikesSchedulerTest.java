@@ -3,7 +3,6 @@ package summer.mrplaylist.likes.service;
 import static summer.mrplaylist.CreateMethod.*;
 
 import java.util.List;
-import java.util.Set;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -46,6 +45,34 @@ class LikesSchedulerTest {
 		// given
 		likesRedisService.flushAll();
 		Member member = getMember();
+		member = memberRepository.save(member);
+
+		PlaylistForm playlistForm = getPlaylistForm(member);
+		List<MusicForm> musicFormList = getMusicFormList();
+		Playlist playlist = playlistService.create(playlistForm, musicFormList);
+
+		// when
+		// member 좋아요 Redis에 저장
+		likesService.playlistAddLike(new LikesForm(playlist.getId(), member.getId()));
+
+		likesScheduler.updatePlaylistLikes();
+		Likes likes1 = likesRepository.findByPlaylistIdAndMemberId(playlist.getId(),
+			member.getId()).orElseThrow(() -> new IllegalStateException("not found likes"));
+		List<Likes> likesList = likesQRepo.findByPlaylistId(playlist.getId());
+
+		//then
+		// 검증 및 saved 전환 확인
+		Assertions.assertThat(member).isEqualTo(likes1.getMember());
+		Assertions.assertThat(
+				likesRedisService.existData(LikesConstants.SAVED_LIKES_PREFIX + playlist.getId(), member.getId()))
+			.isTrue();
+	}
+
+	@Test
+	void 삭제_테스트() throws Exception {
+		// given
+		likesRedisService.flushAll();
+		Member member = getMember();
 		Member member2 = getMember2();
 		member = memberRepository.save(member);
 		member2 = memberRepository.save(member2);
@@ -55,19 +82,14 @@ class LikesSchedulerTest {
 		Playlist playlist = playlistService.create(playlistForm, musicFormList);
 
 		// when
-		likesService.playlistAddLike(new LikesForm(playlist.getId(), member.getId()));
+		// member2 좋아요 제거
 		likesRepository.save(Likes.createLikes(playlist, member2));
 		likesService.playlistDeleteLike(playlist.getId(), member2.getId());
-		Set<Long> likes = likesRedisService.getAllData(LikesConstants.ADD_LIKES_PREFIX + playlist.getId().toString());
 
 		likesScheduler.updatePlaylistLikes();
-		Likes likes1 = likesRepository.findByPlaylistIdAndMemberId(playlist.getId(),
-			member.getId()).orElseThrow(() -> new IllegalStateException("not found likes"));
 		List<Likes> likesList = likesQRepo.findByPlaylistId(playlist.getId());
 
 		//then
-		Assertions.assertThat(member).isEqualTo(likes1.getMember());
 		Assertions.assertThat(likesQRepo.existsByPlaylistIdAndMemberId(playlist.getId(), member2.getId())).isFalse();
-
 	}
 }

@@ -3,6 +3,7 @@ package summer.mrplaylist.likes.repository;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -12,6 +13,7 @@ import summer.mrplaylist.likes.model.QLikes;
 
 @Repository
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class LikesQRepo {
 	private final JPAQueryFactory queryFactory;
 

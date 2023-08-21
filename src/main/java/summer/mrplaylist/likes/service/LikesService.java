@@ -1,6 +1,7 @@
 package summer.mrplaylist.likes.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,16 +39,18 @@ public class LikesService {
 		}
 	}
 
+	@Transactional
 	public void playlistLikeSaveDB(Likes likes) {
 		likesRepository.save(likes);
 	}
 
+	@Transactional
 	public void playlistLikeDeleteDB(Long playlistId, Long memberId) {
 		Likes likes = likesRepository.findByPlaylistIdAndMemberId(playlistId, memberId)
 			.orElseThrow(() -> new IllegalStateException(LikesConstants.NOT_FOUND));
 		likesRepository.delete(likes);
 
-		likesRedisService.removeData(makeKey(LikesConstants.DELETE_LIKES_PREFIX, playlistId), memberId;
+		likesRedisService.removeData(makeKey(LikesConstants.DELETE_LIKES_PREFIX, playlistId), memberId);
 	}
 
 	private boolean existLikes(Long playlistId, Long memberId) {
