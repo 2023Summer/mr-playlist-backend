@@ -70,17 +70,16 @@ public class CreateMethod {
 	}
 
 	public static PlaylistForm getPlaylistForm(Member member) {
-		List<String> categoryNameList = getCategoryNameList();
 
 		PlaylistForm playlistForm = PlaylistForm.builder()
 			.plName("킹 누의 명곡")
 			.plDescription("노동요")
-			.categoryNameList(categoryNameList)
+			.categoryNameList(getCategoryNameList())
+			.musicFormList(getMusicFormList())
 			.member(member)
 			.build();
 
 		return playlistForm;
-
 	}
 
 }

@@ -27,7 +27,7 @@ public abstract class MainArtist {
 	private Long id;
 	@Column(name = "name", length = 100, nullable = false)
 	private String name;
-	@Column(name = "description", length = 200)
+	@Column(name = "description", length = 400)
 	private String description;
 	// 순환참조
 	@OneToMany(mappedBy = "artist")
@@ -37,7 +37,8 @@ public abstract class MainArtist {
 	}
 
 	public String addDescription(String description) {
-		this.description = this.getDescription() + ", " + description;
+		if (!description.isBlank())
+			this.description = this.getDescription() + ", " + description;
 		return description;
 	}
 
@@ -46,7 +47,7 @@ public abstract class MainArtist {
 	}
 
 	public MainArtist update(ArtistUpdateForm updateForm) {
-		this.description = updateForm.getDescription();
+		this.description = addDescription(updateForm.getDescription());
 		this.name = updateForm.getName();
 		return this;
 	}

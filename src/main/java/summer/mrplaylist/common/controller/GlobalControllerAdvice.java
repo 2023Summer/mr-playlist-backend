@@ -27,8 +27,7 @@ public class GlobalControllerAdvice {
 	@ResponseStatus(BAD_REQUEST)
 	@ExceptionHandler(value = {IllegalStateException.class, IllegalArgumentException.class})
 	public ErrorResponse badRequest(RuntimeException e) {
-		log.info("badRequest error: {}", e);
-
+		log.info("BadRequest error: {}", e);
 		return createErrorResponse(e.getMessage());
 	}
 
@@ -41,7 +40,7 @@ public class GlobalControllerAdvice {
 	}
 
 	private static ErrorResponse createErrorResponse(String message) {
-		return new ErrorResponse(LocalDateTime.now(), message);
+		return new ErrorResponse(LocalDateTime.now().toString(), message);
 	}
 
 }

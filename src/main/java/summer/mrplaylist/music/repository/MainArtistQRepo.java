@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import summer.mrplaylist.music.model.MainArtist;
 import summer.mrplaylist.music.model.QMainArtist;
 import summer.mrplaylist.search.dto.SearchCond;
+import summer.mrplaylist.search.dto.SearchResponse;
 
 @Slf4j
 @Repository
@@ -24,14 +25,18 @@ public class MainArtistQRepo {
 
 	QMainArtist qMainArtist = QMainArtist.mainArtist;
 
-	public Page<MainArtist> findArtist(SearchCond cond, Pageable pageable) {
+	public Page<SearchResponse> findArtist(SearchCond cond, Pageable pageable) {
 		List<MainArtist> findArtist = queryFactory.selectFrom(qMainArtist)
 			.where(containName(cond.getWord()))
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
 			.fetch();
 
-		return new PageImpl<>(findArtist, pageable, findArtist.size());
+		List<SearchResponse> searchResponses = findArtist.stream().map(artist ->
+				new SearchResponse(artist.getId(), artist.getName(), artist.getDescription()))
+			.toList();
+
+		return new PageImpl<>(searchResponses, pageable, searchResponses.size());
 	}
 
 	private BooleanExpression containName(String word) {

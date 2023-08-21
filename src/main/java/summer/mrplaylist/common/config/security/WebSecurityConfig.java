@@ -39,6 +39,7 @@ public class WebSecurityConfig {
 			.authorizeHttpRequests(request -> request
 				.requestMatchers("/login/**", "/api/members/**").permitAll()
 				.anyRequest().authenticated())
+			// .anyRequest().permitAll()) // controller 임시 테스트
 			.addFilterBefore(exceptionHandlerFilter, JwtAuthenticationFilter.class);
 
 		http.oauth2Login(oauth2 -> oauth2
