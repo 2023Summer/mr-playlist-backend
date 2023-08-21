@@ -1,5 +1,9 @@
 package summer.mrplaylist.common.dto;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 
 import lombok.Builder;
@@ -7,12 +11,14 @@ import lombok.Data;
 import lombok.Getter;
 
 @Getter
-public class PageResponse<T> extends Response {
+public class PageResponse<T> {
+	private LocalDateTime date;
+	private List<T> data = new ArrayList<>();
 	private PageInfo pageInfo;
 
 	public PageResponse(Page<T> page) {
-		super(page.getContent());
-
+		this.date = LocalDateTime.now();
+		this.data = page.getContent();
 		this.pageInfo = PageInfo.builder()
 			.pageNumber(page.getNumber() + 1)
 			.pageSize(page.getSize())

@@ -4,6 +4,7 @@ import java.time.Duration;
 
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -35,5 +36,12 @@ public class RedisService {
 		template.delete(key);
 	}
 
+	public ZSetOperations<String, String> getZset() {
+		return template.opsForZSet();
+	}
+
+	public void saveAndIncrement(String topic, String word) {
+		template.opsForZSet().incrementScore(topic, word, 1);
+	}
 }
 

@@ -1,4 +1,4 @@
-package summer.mrplaylist.member.dto;
+package summer.mrplaylist.login.dto;
 
 import lombok.Data;
 

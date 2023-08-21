@@ -6,11 +6,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import summer.mrplaylist.common.dto.JwtTokenDto;
 import summer.mrplaylist.common.service.JwtTokenProvider;
 import summer.mrplaylist.common.service.RedisService;
 import summer.mrplaylist.member.constant.MemberConstants;
-import summer.mrplaylist.member.dto.LoginMemberRequestDto;
 import summer.mrplaylist.member.dto.UpdateMemberRequestDto;
 import summer.mrplaylist.member.model.Member;
 import summer.mrplaylist.member.repository.MemberRepository;
@@ -39,17 +37,7 @@ public class MemberService {
 	public Member update(Long id, UpdateMemberRequestDto requestDto) {
 		Member member = memberRepository.findById(id)
 			.orElseThrow(() -> new IllegalArgumentException(MemberConstants.NOT_EXISTS_MEMBER));
-		member.update(requestDto);
+		member.updateMember(requestDto);
 		return member;
-	}
-
-	@Transactional(readOnly = true)
-	public JwtTokenDto login(LoginMemberRequestDto requestDto) {
-		Member member = memberRepository.findByEmail(requestDto.getEmail())
-			.orElseThrow(() -> new IllegalArgumentException(MemberConstants.LOGIN_FAILURE));
-		if (!bCryptPasswordEncoder.matches(requestDto.getPassword(), member.getPassword()))
-			throw new IllegalArgumentException(MemberConstants.LOGIN_FAILURE);
-
-		return jwtTokenProvider.createAllToken(member);
 	}
 }

@@ -46,20 +46,20 @@ public class PlaylistServiceSpringBootTest {
 
 		List<String> categoryNameList = getCategoryNameList();
 
-		PlaylistForm playlistForm = PlaylistForm.builder()
-			.plName("킹 누의 명곡")
-			.plDescription("노동요")
-			.categoryNameList(categoryNameList)
-			.member(member)
-			.build();
-
 		List<MusicForm> musicFormList = new ArrayList<>();
 		musicFormList.add(getMusicForm("킹 누", "일본 5인조", "역몽", "주술회전0 ost"));
 		musicFormList.add(getMusicForm("IU", "국힙 원탑", "Coin", "서브곡"));
 
+		PlaylistForm playlistForm = PlaylistForm.builder()
+			.plName("킹 누의 명곡")
+			.plDescription("노동요")
+			.categoryNameList(categoryNameList)
+			.musicFormList(musicFormList)
+			.member(member)
+			.build();
 		//when
 
-		Playlist playlist = playlistService.create(playlistForm, musicFormList);
+		Playlist playlist = playlistService.create(playlistForm);
 		//then
 
 		assertThat(playlist.getName()).isEqualTo(playlistForm.getPlName());
@@ -89,11 +89,12 @@ public class PlaylistServiceSpringBootTest {
 			.build();
 
 		List<MusicForm> musicFormList = new ArrayList<>();
-		MusicForm musicForm = getMusicForm("킹 누", "일본 5인조", "역몽", "주술회전0 ost");
+		MusicForm musicForm = getMusicForm("킹 누", "일본 5인조", "test-역몽", "주술회전0 ost");
 		musicFormList.add(musicForm);
 		musicFormList.add(getMusicForm("빅뱅", "YG 댄스가수", "붉은 노을", "서브곡"));
+		playlistForm.setMusicFormList(musicFormList);
 
-		Playlist playlist = playlistService.create(playlistForm, musicFormList);
+		Playlist playlist = playlistService.create(playlistForm);
 		Music music = musicRepository.findByName(musicForm.getName()).get();
 		//when
 		playlistService.deleteMusic(playlist.getId(), music.getId());
@@ -112,8 +113,9 @@ public class PlaylistServiceSpringBootTest {
 		List<MusicForm> musicFormList = new ArrayList<>();
 		MusicForm musicForm = getMusicForm("킹 누", "일본 5인조", "역몽", "주술회전0 ost");
 		musicFormList.add(musicForm);
+		playlistForm.setMusicFormList(musicFormList);
 
-		Playlist playlist = playlistService.create(playlistForm, musicFormList);
+		Playlist playlist = playlistService.create(playlistForm);
 		Music music = musicRepository.findByName(musicForm.getName()).get();
 
 		assertThatThrownBy(() -> playlistService.deleteMusic(playlist.getId(), music.getId()))
