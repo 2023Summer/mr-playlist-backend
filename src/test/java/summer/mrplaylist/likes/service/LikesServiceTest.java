@@ -48,7 +48,7 @@ class LikesServiceTest {
 
 		// when
 		likesService.playlistAddLike(new LikesForm(playlist.getId(), member.getId()));
-		Set<Long> likes = likesRedisService.getAllData(LikesConstants.ADD_LIKES_PREFIX + playlist.getId().toString());
+		Set<Long> likes = likesRedisService.getData(LikesConstants.ADD_LIKES_PREFIX + playlist.getId().toString());
 		// then
 		Assertions.assertThat(member.getId()).isIn(likes);
 		Assertions.assertThat(1).isEqualTo(likes.size());
@@ -68,7 +68,7 @@ class LikesServiceTest {
 		// when
 		likesService.playlistAddLike(new LikesForm(playlist.getId(), member.getId()));
 		likesService.playlistDeleteLike(playlist.getId(), member.getId());
-		Set<Long> likes = likesRedisService.getAllData(LikesConstants.ADD_LIKES_PREFIX + playlist.getId().toString());
+		Set<Long> likes = likesRedisService.getData(LikesConstants.ADD_LIKES_PREFIX + playlist.getId().toString());
 		// then
 		Assertions.assertThat(member.getId().toString()).isNotIn(likes);
 		Assertions.assertThat(0).isEqualTo(likes.size());
@@ -82,7 +82,7 @@ class LikesServiceTest {
 		for (int memberId = 0; memberId < 10; memberId++) {
 			likesService.playlistAddLike(new LikesForm(playlistId, Long.valueOf(memberId)));
 		}
-		Set<Long> likes = likesRedisService.getAllData("likes:playlist:" + playlistId);
+		Set<Long> likes = likesRedisService.getData(LikesConstants.ADD_LIKES_PREFIX + playlistId);
 		// then
 		Assertions.assertThat(10).isEqualTo(likes.size());
 	}

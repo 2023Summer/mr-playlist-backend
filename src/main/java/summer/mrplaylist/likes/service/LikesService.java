@@ -13,6 +13,7 @@ import summer.mrplaylist.likes.repository.LikesRepository;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 @Slf4j
 public class LikesService {
 
@@ -23,7 +24,11 @@ public class LikesService {
 	private final LikesQRepo likesQRepo;
 
 	public void playlistAddLike(LikesForm likesForm) {
-		if (!existLikes(likesForm.getPlaylistId(), likesForm.getMemberId())) {
+		if (likesRedisService.existData(makeKey(LikesConstants.DELETE_LIKES_PREFIX, likesForm.getPlaylistId()),
+			likesForm.getMemberId())) {
+			likesRedisService.removeData(makeKey(LikesConstants.DELETE_LIKES_PREFIX, likesForm.getPlaylistId()),
+				likesForm.getMemberId());
+		} else if (!existLikes(likesForm.getPlaylistId(), likesForm.getMemberId())) {
 			setLike(LikesConstants.ADD_LIKES_PREFIX, likesForm.getPlaylistId(), likesForm.getMemberId());
 		}
 	}
@@ -39,12 +44,10 @@ public class LikesService {
 		}
 	}
 
-	@Transactional
 	public void playlistLikeSaveDB(Likes likes) {
 		likesRepository.save(likes);
 	}
 
-	@Transactional
 	public void playlistLikeDeleteDB(Long playlistId, Long memberId) {
 		Likes likes = likesRepository.findByPlaylistIdAndMemberId(playlistId, memberId)
 			.orElseThrow(() -> new IllegalStateException(LikesConstants.NOT_FOUND));

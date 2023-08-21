@@ -1,10 +1,10 @@
 package summer.mrplaylist.likes.controller;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ import summer.mrplaylist.member.model.Member;
 public class LikesController {
 	private final LikesService likesService;
 	private static final String POST_ADD_LIKE = "/like";
-	private static final String DELETE_LIKE = "/like/delete";
+	private static final String DELETE_LIKE = "/like/delete/{playlist_id}";
 
 	@PostMapping(POST_ADD_LIKE)
 	public Response<String> postLike(@RequestBody LikesForm likesForm) {
@@ -31,7 +31,7 @@ public class LikesController {
 	}
 
 	@DeleteMapping(DELETE_LIKE)
-	public Response<String> deleteLike(@RequestParam("playlist_id") Long playlistId,
+	public Response<String> deleteLike(@PathVariable("playlist_id") Long playlistId,
 		@CurrentUser Member currentMember) {
 		likesService.playlistDeleteLike(playlistId, currentMember.getId());
 		return new Response("좋아요가 취소되었습니다.");

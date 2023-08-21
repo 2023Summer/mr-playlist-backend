@@ -33,7 +33,7 @@ public class LikesRedisService {
 		setOperations.remove(key, value);
 	}
 
-	public Set<Long> getAllData(String key) {
+	public Set<Long> getData(String key) {
 		return setOperations.members(key);
 	}
 
