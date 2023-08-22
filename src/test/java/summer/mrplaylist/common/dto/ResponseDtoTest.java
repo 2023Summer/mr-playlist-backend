@@ -44,9 +44,7 @@ class ResponseDtoTest {
 		//when
 		PageResponse pageResponse = new PageResponse<>(page);
 		//then
-
-		log.info("PageResponse = {}", (Response)pageResponse);
-
+		log.info("PageResponse = {}", pageResponse);
 	}
 
 }

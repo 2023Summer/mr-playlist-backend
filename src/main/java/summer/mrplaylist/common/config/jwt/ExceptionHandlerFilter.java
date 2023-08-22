@@ -34,7 +34,7 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
 
 		response.getWriter().write(
 			new ErrorResponse(
-				LocalDateTime.now(),
+				LocalDateTime.now().toString(),
 				e.getMessage()
 			)
 				.convertToJson()

@@ -73,7 +73,7 @@ public class MainArtistServiceBootTest {
 			.filter(m -> m.getName().equals("GD"))
 			.findFirst().get();
 
-		mainArtistService.deleteSoloArtist(soloArtist.getId());
+		mainArtistService.deleteArtist(soloArtist.getId());
 
 		assertThat(group.getGroupSoloArtistList().stream().map(n -> n.getName()).collect(Collectors.toList()))
 			.doesNotContain("GD");

@@ -12,6 +12,7 @@ import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,11 +26,10 @@ import summer.mrplaylist.music.dto.MusicForm;
 import summer.mrplaylist.playlist.dto.PlaylistForm;
 import summer.mrplaylist.playlist.service.PlaylistService;
 
-// @Profile({"test", "init"})
+@Profile("init")
 @Component
 @RequiredArgsConstructor
 @Slf4j
-// @ConditionalOnResource(resources = "PlaylistData.xlsx")
 public class XlsxFileParser {
 
 	private final PlaylistService playlistService;
@@ -71,12 +71,6 @@ public class XlsxFileParser {
 			String plName = readCell(plRow, 0);
 			String plDescription = readCell(plRow, 1);
 			List<String> plCategory = Arrays.asList(readCell(plRow, 2).split(","));
-
-			PlaylistForm playlistForm = PlaylistForm.builder()
-				.plName(plName)
-				.plDescription(plDescription)
-				.categoryNameList(plCategory)
-				.build();
 
 			List<MusicForm> musicFormList = new ArrayList<>();
 			for (int rowIdx = plIndexList.get(i); rowIdx < plIndexList.get(i + 1); rowIdx++) {
@@ -130,7 +124,13 @@ public class XlsxFileParser {
 					musicFormList.add(musicForm);
 				}
 			}
-			playlistService.create(playlistForm, musicFormList);
+			PlaylistForm playlistForm = PlaylistForm.builder()
+				.plName(plName)
+				.plDescription(plDescription)
+				.categoryNameList(plCategory)
+				.musicFormList(musicFormList)
+				.build();
+			playlistService.create(playlistForm);
 		}
 
 	}

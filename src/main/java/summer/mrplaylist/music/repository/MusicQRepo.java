@@ -15,7 +15,10 @@ import lombok.extern.slf4j.Slf4j;
 import summer.mrplaylist.music.model.Music;
 import summer.mrplaylist.music.model.QMainArtist;
 import summer.mrplaylist.music.model.QMusic;
+import summer.mrplaylist.playlist.model.Playlist;
+import summer.mrplaylist.playlist.model.QPlaylist;
 import summer.mrplaylist.search.dto.SearchCond;
+import summer.mrplaylist.search.dto.SearchResponse;
 
 @Slf4j
 @Repository
@@ -23,11 +26,11 @@ import summer.mrplaylist.search.dto.SearchCond;
 public class MusicQRepo {
 
 	private final JPAQueryFactory queryFactory;
-
 	QMusic qMusic = QMusic.music;
 	QMainArtist qMainArtist = QMainArtist.mainArtist;
+	QPlaylist qPlaylist = QPlaylist.playlist;
 
-	public Page<Music> findNameAndArtist(SearchCond cond, Pageable pageable) {
+	public Page<SearchResponse> findNameAndArtist(SearchCond cond, Pageable pageable) {
 		List<Music> findMusic = queryFactory.selectFrom(qMusic)
 			.join(qMusic.artist, qMainArtist).fetchJoin()
 			.where(containName(cond.getWord())
@@ -37,7 +40,20 @@ public class MusicQRepo {
 			.orderBy()
 			.fetch();
 
-		return new PageImpl<>(findMusic, pageable, findMusic.size());
+		List<SearchResponse> searchResponses = findMusic.stream().map(
+			music -> new SearchResponse(music.getId(), music.getName(), music.getDescription())
+		).toList();
+		return new PageImpl<>(searchResponses, pageable, searchResponses.size());
+	}
+
+	public List<Music> findMusicWithArtist(Playlist playlist) {
+		List<Music> result = queryFactory.selectFrom(qMusic)
+			.leftJoin(qMusic.playlist, qPlaylist).fetchJoin()
+			.leftJoin(qMusic.artist, qMainArtist).fetchJoin()
+			.where(qMusic.playlist.eq(playlist))
+			.fetch();
+		return result;
+
 	}
 
 	private BooleanExpression likeArtist(String word) {
