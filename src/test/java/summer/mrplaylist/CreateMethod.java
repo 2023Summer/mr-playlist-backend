@@ -31,6 +31,17 @@ public class CreateMethod {
 		return member;
 	}
 
+	public static Member getMember2() {
+		Member member = Member.builder()
+			.email("test2@naver.com")
+			.password("abc")
+			.nickname("jpop2")
+			.profileImg("abcde")
+			.role(Role.USER)
+			.build();
+		return member;
+	}
+
 	public static List<MusicForm> getMusicFormList() {
 		List<MusicForm> musicFormList = new ArrayList<>();
 

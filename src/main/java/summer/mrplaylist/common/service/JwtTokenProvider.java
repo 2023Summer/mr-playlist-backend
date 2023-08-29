@@ -53,10 +53,11 @@ public class JwtTokenProvider {
 	}
 
 	public String createRefreshToken(Member member) {
+		Long refreshTokenExpiration = System.currentTimeMillis() + jwtProperties.getRefreshTokenExpiration();
 		String refreshToken = Jwts.builder()
 			.setHeaderParam(Header.TYPE, Header.JWT_TYPE)
 			.setIssuedAt(new Date())
-			.setExpiration(new Date(System.currentTimeMillis() + jwtProperties.getRefreshTokenExpiration()))
+			.setExpiration(new Date(refreshTokenExpiration))
 			.setSubject(member.getEmail())
 			.claim("id", member.getId())
 			.signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())
@@ -65,8 +66,7 @@ public class JwtTokenProvider {
 		redisService.setDataWithExpire(
 			member.getEmail(),
 			refreshToken,
-			600L
-		);
+			refreshTokenExpiration / 1000);
 
 		return refreshToken;
 	}

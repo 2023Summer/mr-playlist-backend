@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class UpdateMemberRequestDto {
+	private Long id;
 	private String email;
 	private String password;
 	private String nickname;
