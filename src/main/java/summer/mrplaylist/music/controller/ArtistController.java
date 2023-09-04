@@ -23,7 +23,6 @@ import summer.mrplaylist.music.model.Group;
 import summer.mrplaylist.music.model.MainArtist;
 import summer.mrplaylist.music.model.SoloArtist;
 import summer.mrplaylist.music.service.MainArtistService;
-import summer.mrplaylist.playlist.dto.PlaylistForm;
 
 @Slf4j
 @RequiredArgsConstructor
