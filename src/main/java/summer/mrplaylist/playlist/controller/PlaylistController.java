@@ -4,22 +4,19 @@ import static summer.mrplaylist.playlist.controller.PlaylistController.Message.*
 
 import java.util.List;
 
+import org.openxmlformats.schemas.spreadsheetml.x2006.main.STIconSetType;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 import summer.mrplaylist.common.dto.Response;
+import summer.mrplaylist.common.model.FileDetail;
+import summer.mrplaylist.common.service.FileUploadService;
 import summer.mrplaylist.playlist.dto.PlaylistForm;
 import summer.mrplaylist.playlist.dto.PlaylistResponse;
 import summer.mrplaylist.playlist.dto.PlaylistSimpleResponse;
@@ -33,6 +30,7 @@ import summer.mrplaylist.playlist.service.PlaylistService;
 public class PlaylistController {
 
 	private final PlaylistService playlistService;
+	private final FileUploadService fileUploadService;
 
 	private static final String POST_REGISTER_PLAYLIST = "/playlist/register";
 	private static final String POST_UPDATE_PLAYLIST = "/playlist/update";
@@ -43,7 +41,22 @@ public class PlaylistController {
 	private static final String GET_PLAYLIST_BY_CATEGORY = "/playlist/find-category";
 
 	@PostMapping(POST_REGISTER_PLAYLIST)
-	public Response registerPlaylist(@RequestBody PlaylistForm playlistForm) {
+	//public Response registerPlaylist(@RequestBody PlaylistForm playlistForm) {
+	public Response registerPlaylist(@RequestPart("playlistForm") PlaylistForm playlistForm,
+									 @RequestPart("thumbnailImage") MultipartFile thumbnailImage) {
+		String imageUrl;
+
+		if(thumbnailImage.isEmpty()){
+			// 사용자가 썸네일 이미지를 추가하지 않은 경우
+			String firstUrl =  playlistForm.getMusicFormList().get(0).getUrl();
+			String videoId = playlistForm.getMusicFormList().get(0).getUrl().substring(firstUrl.indexOf("=")+1);
+			imageUrl = "https://img.youtube.com/vi/" + videoId + "/maxresdefault.jpg";
+		}
+		else {
+			// 사용자가 이미지를 추가한 경우
+			imageUrl = fileUploadService.save(thumbnailImage, "aws test/").getImgUrl();
+		}
+		playlistForm.setImgUrl(imageUrl);
 		Playlist playlist = playlistService.create(playlistForm);
 		return createResponse(playlist, "성공적으로 저장했습니다.");
 	}

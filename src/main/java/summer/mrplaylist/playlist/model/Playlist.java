@@ -50,6 +50,9 @@ public class Playlist {
 	@Column(name = "description")
 	private String description;
 
+	@Column(name = "imgUrl")
+	private String imgUrl;
+
 	@Column(name = "music_count", nullable = false)
 	private Integer musicCount;
 
@@ -76,6 +79,7 @@ public class Playlist {
 		return Playlist.builder()
 			.name(playlistForm.getPlName())
 			.description(playlistForm.getPlDescription())
+			.imgUrl(playlistForm.getImgUrl())
 			.views(0)
 			.musicCount(playlistForm.getMusicFormList().size())
 			.commentCount(0)

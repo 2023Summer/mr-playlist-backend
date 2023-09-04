@@ -44,6 +44,9 @@ public class Music {
 	@Column(name = "description", length = 200)
 	private String description;
 
+	@Column(name = "imgUrl", length = 200)
+	private String imgUrl;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "artist_id")
 	private MainArtist artist;
@@ -61,6 +64,7 @@ public class Music {
 			.name(musicForm.getName())
 			.url(musicForm.getUrl())
 			.description(musicForm.getDescription())
+			.imgUrl(musicForm.getImgUrl())
 			.build();
 		music.addArtist(mainArtist);
 		return music;
@@ -73,6 +77,7 @@ public class Music {
 			.url(musicForm.getUrl())
 			.playlist(playlist)
 			.description(musicForm.getDescription())
+			.imgUrl(musicForm.getImgUrl())
 			.build();
 		music.addArtist(mainArtist);
 		playlist.getMusicList().add(music);

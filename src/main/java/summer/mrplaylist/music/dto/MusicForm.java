@@ -16,6 +16,7 @@ public class MusicForm {
 	private String name;
 	private String url;
 	private String description;
+	private String imgUrl;
 
 	private GroupForm groupForm;
 	private List<ArtistForm> artistFormList;

@@ -17,6 +17,7 @@ import summer.mrplaylist.music.dto.MusicForm;
 public class PlaylistForm {
 	private String plName;
 	private String plDescription;
+	private String imgUrl;
 	private Member member;
 	private List<String> categoryNameList;
 	private List<MusicForm> musicFormList;
