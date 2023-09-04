@@ -25,8 +25,11 @@ public class SoloArtist extends MainArtist {
 	private Group group;
 
 	@Builder
-	public SoloArtist(Long id, String name, String description, Group group) {
-		super(id, name, description, new ArrayList<>());
+	public SoloArtist(Long id, String name, String description, Group group, String imgUrl) {
+	// imgUrl 추가 위해 살짝 수정함.
+	//public SoloArtist(Long id, String name, String description, Group group) {
+		super(id, name, description, imgUrl, new ArrayList<>());
+		//super(id, name, description, new ArrayList<>());
 		this.group = group;
 	}
 
@@ -34,6 +37,7 @@ public class SoloArtist extends MainArtist {
 		SoloArtist soloArtist = SoloArtist.builder()
 			.name(artistForm.getName())
 			.description(artistForm.getDescription())
+			.imgUrl(artistForm.getImgUrl())
 			.build();
 		return soloArtist;
 	}

@@ -90,14 +90,20 @@ public class XlsxFileParser {
 				// 그룹
 				String groupName = readCell(row, 6);
 				String groupDescription = readCell(row, 7);
+				// 엑셀 파일에 없어서 임시로 작성.
+				String groupImgUrl = "https://file.notion.so/f/s/9d715690-ad09-4dcf-bfb3-13c60a818d22/50FF8E6E-D024-4D10-A262-66D20AD68ED7.png?id=aeaacbf3-94ae-480b-81a4-9a2efd16b218&table=block&spaceId=a264ac69-6677-4f49-9ae5-2ab17f7ebc21&expirationTimestamp=1693699200000&signature=HQJeHmyc0hjKktjFhUvbwWJOFi1tyt3uSG5J6PEI5kE&downloadName=50FF8E6E-D024-4D10-A262-66D20AD68ED7.png";
+
 
 				// 가수 목록
 				List<ArtistForm> artistList = new ArrayList<>();
 				for (int colIdx = 9; colIdx <= row.getPhysicalNumberOfCells(); colIdx += 2) {
 					String artistName = readCell(row, colIdx);
 					String artistDescription = readCell(row, colIdx + 1);
+					// 엑셀 파일에 없어서 임시로 작성.
+					String imgUrl = "https://file.notion.so/f/s/9d715690-ad09-4dcf-bfb3-13c60a818d22/50FF8E6E-D024-4D10-A262-66D20AD68ED7.png?id=aeaacbf3-94ae-480b-81a4-9a2efd16b218&table=block&spaceId=a264ac69-6677-4f49-9ae5-2ab17f7ebc21&expirationTimestamp=1693699200000&signature=HQJeHmyc0hjKktjFhUvbwWJOFi1tyt3uSG5J6PEI5kE&downloadName=50FF8E6E-D024-4D10-A262-66D20AD68ED7.png";
 					if (!artistName.isBlank()) {
-						artistList.add(new ArtistForm(artistName, artistDescription));
+						artistList.add(new ArtistForm(artistName, artistDescription, imgUrl));
+						//artistList.add(new ArtistForm(artistName, artistDescription));
 					}
 				}
 
@@ -107,7 +113,7 @@ public class XlsxFileParser {
 						.description(musicDescription)
 						.url(musicUrl)
 						.artistFormList(artistList)
-						.groupForm(new GroupForm(groupName, groupDescription))
+						.groupForm(new GroupForm(groupName, groupDescription, groupImgUrl))
 						.build();
 
 					musicFormList.add(musicForm);

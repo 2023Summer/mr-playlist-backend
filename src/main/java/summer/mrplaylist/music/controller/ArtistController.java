@@ -4,21 +4,16 @@ import static summer.mrplaylist.music.controller.ArtistController.Message.*;
 
 import java.util.List;
 
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.multipart.MultipartFile;
 import summer.mrplaylist.common.dto.Response;
+import summer.mrplaylist.common.service.FileUploadService;
 import summer.mrplaylist.music.dto.ArtistForm;
 import summer.mrplaylist.music.dto.ArtistUpdateForm;
 import summer.mrplaylist.music.dto.GroupForm;
@@ -36,6 +31,7 @@ import summer.mrplaylist.music.service.MainArtistService;
 public class ArtistController {
 
 	private final MainArtistService artistService;
+	private final FileUploadService fileUploadService;
 
 	private static final String POST_JOIN_ARTIST = "/artist/register";
 	private static final String POST_JOIN_GROUP_ARTIST = "/artist/group/register";
@@ -44,7 +40,17 @@ public class ArtistController {
 	private static final String DELETE_ARTIST = "/artist/delete";
 
 	@PostMapping(POST_JOIN_ARTIST)
-	public Response joinArtist(@RequestBody ArtistForm artistForm) {
+	public Response joinArtist(@RequestPart("artistForm") ArtistForm artistForm,
+							   @RequestPart("artistImage") MultipartFile artistImage) {
+	//public Response joinArtist(@RequestBody ArtistForm artistForm) {
+		String imageUrl;
+		if(artistImage.isEmpty()){
+			imageUrl = "https://www.cheonyu.com/_DATA/product/60900/60960_1666159152.jpg";
+		}
+		else{
+			imageUrl = fileUploadService.save(artistImage, "aws test/").getImgUrl();
+		}
+		artistForm.setImgUrl(imageUrl);
 		SoloArtist artist = artistService.createArtist(artistForm);
 		return createResponse(artist, "성공적으로 저장했습니다.");
 	}

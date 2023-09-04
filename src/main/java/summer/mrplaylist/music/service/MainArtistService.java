@@ -60,6 +60,7 @@ public class MainArtistService {
 		if (findArtist.isPresent()) {
 			SoloArtist artist = (SoloArtist)findArtist.get();
 			artist.addDescription(artistForm.getDescription());
+			artist.addImgUrl(artistForm.getImgUrl());
 			return artist;
 		} else {
 			SoloArtist artist = SoloArtist.createArtist(artistForm);
@@ -75,6 +76,7 @@ public class MainArtistService {
 		if (findGroup.isPresent()) {
 			Group group = (Group)findGroup.get();
 			group.addDescription(groupForm.getGroupDescription());
+			group.addImgUrl(groupForm.getImgUrl());
 			return group;
 		} else {
 			Group group = Group.createGroup(groupForm);

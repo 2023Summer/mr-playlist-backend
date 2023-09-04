@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 public class GroupForm {
 	private String groupName;
 	private String groupDescription;
+	private String imgUrl;
 }

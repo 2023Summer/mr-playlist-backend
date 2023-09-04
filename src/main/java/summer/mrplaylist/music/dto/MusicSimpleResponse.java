@@ -11,6 +11,7 @@ public class MusicSimpleResponse {
 
 	private Long musicId;
 	private String musicName;
+	private String musicImgUrl;
 
 	private Long artistId;
 	private String artistName;
@@ -18,6 +19,7 @@ public class MusicSimpleResponse {
 	public MusicSimpleResponse(Music music) {
 		this.musicId = music.getId();
 		this.musicName = music.getName();
+		this.musicImgUrl = music.getImgUrl();
 		this.artistId = music.getArtist().getId();
 		this.artistName = music.getArtist().getName();
 	}

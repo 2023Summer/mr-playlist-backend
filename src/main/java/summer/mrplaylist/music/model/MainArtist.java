@@ -29,6 +29,8 @@ public abstract class MainArtist {
 	private String name;
 	@Column(name = "description", length = 400)
 	private String description;
+	@Column(name = "imgUrl", length = 400)
+	private String imgUrl;
 	// 순환참조
 	@OneToMany(mappedBy = "artist")
 	private List<Music> musicList;
@@ -40,6 +42,13 @@ public abstract class MainArtist {
 		if (!description.isBlank())
 			this.description = this.getDescription() + ", " + description;
 		return description;
+	}
+
+	// 사진 url 추가
+	public String addImgUrl(String imgUrl){
+		if(!this.imgUrl.isBlank())
+			this.imgUrl = this.getImgUrl();
+		return this.imgUrl;
 	}
 
 	public void addMusic(Music music) {

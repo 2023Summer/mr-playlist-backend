@@ -26,9 +26,11 @@ public class Group extends MainArtist {
 	@OneToMany(mappedBy = "group", cascade = CascadeType.PERSIST)
 	private List<SoloArtist> groupSoloArtistList;
 
-	@Builder
-	public Group(Long id, String name, String description, int totalArtist) {
-		super(id, name, description, new ArrayList<>());
+	@Builder // imgUrl추가로 변경
+	public Group(Long id, String name, String description, String imgUrl, int totalArtist) {
+	//public Group(Long id, String name, String description, int totalArtist) {
+		super(id, name, description, imgUrl, new ArrayList<>());
+		//super(id, name, description, new ArrayList<>());
 
 		this.totalArtist = totalArtist;
 		this.groupSoloArtistList = new ArrayList<>();
