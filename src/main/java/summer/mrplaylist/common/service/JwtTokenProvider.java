@@ -37,7 +37,6 @@ public class JwtTokenProvider {
 
 	public JwtTokenDto createAllToken(Member member) {
 		return JwtTokenDto.createJwtTokenDto(createAccessToken(member), createRefreshToken(member));
-
 	}
 
 	public String createAccessToken(Member member) {
@@ -73,6 +72,9 @@ public class JwtTokenProvider {
 
 	public boolean validToken(String token) {
 		try {
+			if (redisService.existData(token)) {
+				throw new TokenNotValidateException(JwtTokenConstants.INVALID_TOKEN); // 로그아웃하여 밴된 토큰 처리
+			}
 			Jwts.parser()
 				.setSigningKey(jwtProperties.getSecretKey())
 				.parseClaimsJws(token);
@@ -94,6 +96,14 @@ public class JwtTokenProvider {
 			.parseClaimsJws(token)
 			.getBody()
 			.getSubject();
+	}
+
+	public Long getExpiration(String token) {
+		return Jwts.parser()
+			.setSigningKey(jwtProperties.getSecretKey())
+			.parseClaimsJws(token)
+			.getBody()
+			.getExpiration().getTime();
 	}
 
 	public String preprocessingToken(HttpServletRequest request) {
@@ -123,5 +133,16 @@ public class JwtTokenProvider {
 		return createAccessToken(member);
 	}
 
-}
+	public void banAccessToken(String accessToken, String email) {
+		// 만료까지 남은 시간
+		Long nowTime = new Date().getTime();
+		Long remainExpirationTime = nowTime - getExpiration(accessToken);
 
+		// 레디스에 등록
+		redisService.setDataWithExpire(
+			accessToken, // 키를 토큰으로 등록
+			email,
+			remainExpirationTime
+		);
+	}
+}

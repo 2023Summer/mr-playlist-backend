@@ -30,4 +30,9 @@ public class LoginService {
 
 		return jwtTokenProvider.createAllToken(member);
 	}
+
+	@Transactional
+	public void logout(JwtTokenDto jwtTokenDto, String email) {
+		jwtTokenProvider.banAccessToken(jwtTokenDto.getAccessToken(), email);
+	}
 }

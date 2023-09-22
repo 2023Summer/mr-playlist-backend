@@ -1,5 +1,7 @@
 package summer.mrplaylist.login.controller;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,8 +11,10 @@ import lombok.RequiredArgsConstructor;
 import summer.mrplaylist.common.config.jwt.JwtProperties;
 import summer.mrplaylist.common.dto.JwtTokenDto;
 import summer.mrplaylist.common.dto.Response;
+import summer.mrplaylist.common.util.CurrentUser;
 import summer.mrplaylist.login.dto.LoginMemberRequestDto;
 import summer.mrplaylist.login.service.LoginService;
+import summer.mrplaylist.member.model.Member;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,6 +22,8 @@ public class LoginController {
 
 	private final LoginService loginService;
 	private static final String POST_LOGIN = "/login";
+
+	private static final String POST_LOGOUT = "/logout";
 	private static final String POST_OAUTH2_LOGIN = "/login/oauth2";
 
 	@PostMapping(POST_LOGIN)
@@ -29,9 +35,10 @@ public class LoginController {
 		return new Response<>(tokenDto);
 	}
 
-	// @GetMapping("/test")
-	// public ResponseEntity<Member> test(@CurrentUser Member member) {
-	// 	return ResponseEntity.ok(member);
-	// }
+	@GetMapping(POST_LOGOUT)
+	public ResponseEntity<String> test(@RequestBody JwtTokenDto jwtTokenDto, @CurrentUser Member member) {
+		loginService.logout(jwtTokenDto, member.getEmail());
+		return ResponseEntity.ok("로그아웃");
+	}
 
 }
