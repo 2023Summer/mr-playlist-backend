@@ -36,7 +36,7 @@ public class LoginController {
 	}
 
 	@GetMapping(POST_LOGOUT)
-	public ResponseEntity<String> test(@RequestBody JwtTokenDto jwtTokenDto, @CurrentUser Member member) {
+	public ResponseEntity<String> postLogout(@RequestBody JwtTokenDto jwtTokenDto, @CurrentUser Member member) {
 		loginService.logout(jwtTokenDto, member.getEmail());
 		return ResponseEntity.ok("로그아웃");
 	}
